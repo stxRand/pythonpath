@@ -1,6 +1,8 @@
 import urllib2
 import urllib
 from lxml import etree
+import sys
+import getopt
 
 
 def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
@@ -12,7 +14,6 @@ def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
     url_params = urllib.urlencode(url_params)
 
     nokaut_url = 'http://api.nokaut.pl/?%s' % url_params
-    print nokaut_url
     response = urllib2.urlopen(nokaut_url)
     xml = response.read()
 
@@ -50,3 +51,43 @@ def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
     if(len(products) == 0):
         return (None, None)
     return products.popitem()[1]
+
+
+def usage():
+    print("nokaut -p 'product_name' -k 'your_nokaut_key'")
+
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hp:k:", ["help", "product=", "key="])
+    except getopt.GetoptError as err:
+        # print help information and exit:
+        print(str(err))  # will print something like "option -a not recognized"
+        usage()
+        sys.exit(2)
+
+    key = None
+    product = None
+
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            usage()
+            sys.exit(1)
+        elif o in ("-p", "--product"):
+            product = a
+        elif o in ("-k", "--key"):
+            key = a
+        else:
+            usage()
+            sys.exit(2)
+
+    if(key is None or product is None):
+        usage()
+        sys.exit(2)
+    else:
+        (price, url) = get_proce_and_url_from_nokaut(product_name=product,
+                                                     nokaut_key=key)
+        print(price, url)  
+
+if __name__ == "__main__":
+    main()
