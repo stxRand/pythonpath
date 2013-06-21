@@ -40,26 +40,26 @@ def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
     product_id = 0
 
     for action, elem in context:
-        if(action == 'end' and elem.tag == 'item'):
+        if (action == 'end' and elem.tag == 'item'):
             (old_price, old_shop_url) = products.setdefault(product_id, 
                                                             (price, shop_url))
-            if(price < old_price):
+            if (price < old_price):
                 products[product_id] = (price, shop_url)
-        if(action == 'end' and elem.tag == 'price'):
+        if (action == 'end' and elem.tag == 'price'):
             price = Decimal(elem.text.replace(',', '.'))
-        if(action == 'end' and elem.tag == 'product_id'):
+        if (action == 'end' and elem.tag == 'product_id'):
             product_id = int(elem.text)
-        if(action == 'end' and elem.tag == 'shop_url'):
+        if (action == 'end' and elem.tag == 'shop_url'):
             shop_url = str(elem.text)
 
-        if(action == 'start'):
+        if (action == 'start'):
             indent += '    '
-        if(action == 'end'):
+        if (action == 'end'):
             print("    %s %s %s" % (indent, elem.tag, elem.text))
             indent = indent[0:-4]
 
     print(products)
-    if(len(products) == 0):
+    if (len(products) == 0):
         return (None, None)
     return products.popitem()[1]
 
@@ -82,18 +82,18 @@ def main():
     product = None
 
     for opt, arg in opts:
-        if opt in ("-h", "--help"):
+        if (opt in ("-h", "--help")):
             usage()
             sys.exit(1)
-        elif opt in ("-p", "--product"):
+        elif (opt in ("-p", "--product")):
             product = arg
-        elif opt in ("-k", "--key"):
+        elif (opt in ("-k", "--key")):
             key = arg
         else:
             usage()
             sys.exit(2)
 
-    if(key is None or product is None):
+    if (key is None or product is None):
         usage()
         sys.exit(2)
     else:

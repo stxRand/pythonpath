@@ -20,7 +20,7 @@ class TestNokaut(unittest.TestCase):
             nokaut_key='a8839b1180ea00fa1cf7c6b74ca01bb5'
         )
         self.assertIsInstance(price, Decimal)
-        self.assertTrue(price >= 0.0)
+        self.assertTrue(price >= Decimal(0.0))
         self.assertIsInstance(url, str)
 
     @patch.object(sys, 'argv', ['nokaut',
