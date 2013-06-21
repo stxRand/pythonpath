@@ -3,6 +3,7 @@ import urllib
 from lxml import etree
 import sys
 import getopt
+from decimal import Decimal
 
 
 def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
@@ -24,8 +25,8 @@ def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
     context = etree.iterwalk(root, events=("start", "end"),
                              tag=('item', 'price', 'product_id', 'shop_url'))
 
-    products = dict()
-    price = 0.0
+    products = {}
+    price = Decimal(0.0)
     shop_url = ''
     product_id = 0
 
@@ -35,7 +36,7 @@ def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
             if(price < old_price):
                 products[product_id] = (price, shop_url)
         if(action == 'end' and elem.tag == 'price'):
-            price = float(elem.text.replace(',', '.'))
+            price = Decimal(elem.text.replace(',', '.'))
         if(action == 'end' and elem.tag == 'product_id'):
             product_id = int(elem.text)
         if(action == 'end' and elem.tag == 'shop_url'):
@@ -47,7 +48,7 @@ def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
             print("    %s %s %s" % (indent, elem.tag, elem.text))
             indent = indent[0:-4]
 
-    print products
+    print(products)
     if(len(products) == 0):
         return (None, None)
     return products.popitem()[1]
@@ -87,7 +88,8 @@ def main():
     else:
         (price, url) = get_proce_and_url_from_nokaut(product_name=product,
                                                      nokaut_key=key)
-        print(price, url)  
+        print(price, url)
+
 
 if __name__ == "__main__":
     main()

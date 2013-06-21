@@ -2,6 +2,7 @@ import unittest
 from mock import patch
 import sys
 from pythonpath import nokaut
+from decimal import Decimal
 
 
 class TestNokaut(unittest.TestCase):
@@ -17,7 +18,7 @@ class TestNokaut(unittest.TestCase):
             nokaut_key='a8839b1180ea00fa1cf7c6b74ca01bb5'
         )
         self.assertTrue(price >= 0.0)
-        self.assertIsInstance(price, float)
+        self.assertIsInstance(price, type(Decimal))
         self.assertIsInstance(url, str)
 
     @patch.object(sys, 'argv', ['nokaut', 
