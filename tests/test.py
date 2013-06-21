@@ -8,6 +8,8 @@ from decimal import Decimal
 class TestNokaut(unittest.TestCase):
 
     def test_nokaut(self):
+        """testing get_proce_and_url_from_nokaut function from nokaut"""
+
         (price, url) = nokaut.get_proce_and_url_from_nokaut(
             product_name='Sony nex-7',
             nokaut_key='bad_key'
@@ -17,15 +19,20 @@ class TestNokaut(unittest.TestCase):
             product_name='Sony nex-7',
             nokaut_key='a8839b1180ea00fa1cf7c6b74ca01bb5'
         )
+        self.assertIsInstance(price, Decimal)
         self.assertTrue(price >= 0.0)
-        self.assertIsInstance(price, type(Decimal))
         self.assertIsInstance(url, str)
 
-    @patch.object(sys, 'argv', ['nokaut', 
-                                '-p', 'Sony nex-7', 
+    @patch.object(sys, 'argv', ['nokaut',
+                                '-p', 'Sony nex-7',
                                 '-k', 'a8839b1180ea00fa1cf7c6b74ca01bb5'
                                 ])
     def test_nokaut_main1(self):
+        """testing get_proce_and_url_from_nokaut
+        function through main function
+
+        """
+
         try:
             nokaut.main()
         except Exception, err:
@@ -33,6 +40,11 @@ class TestNokaut(unittest.TestCase):
 
     @patch.object(sys, 'argv', ['nokaut', '-z'])
     def test_nokaut_main2(self):
+        """testing get_proce_and_url_from_nokaut 
+        function through main function
+
+        """
+
         try:
             nokaut.main()
         except SystemExit, err:
@@ -56,6 +68,11 @@ class TestNokaut(unittest.TestCase):
             self.fail('SystemExit exception expected')
 
     def test_nokaut_commandline(self):
+        """testing get_proce_and_url_from_nokaut 
+        function through command line
+
+        """
+        
         import os
         err = os.system(
             "nokaut -p 'Sony nex-7' -k 'a8839b1180ea00fa1cf7c6b74ca01bb5'"
