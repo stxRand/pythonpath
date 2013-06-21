@@ -3,8 +3,7 @@ import urllib
 from lxml import etree
 
 
-def nokaut(product_name='canon450d',
-           nokaut_key='a8839b1180ea00fa1cf7c6b74ca01bb5'):
+def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
     method = 'nokaut.Price.getByProductName'
     method_param = 'name'
 

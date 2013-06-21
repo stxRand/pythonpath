@@ -8,12 +8,11 @@ setup(
     author="Marcin Kowiel",
     author_email="marcin.kowiel@stxnext.pl",
     description="Python Path Project",
-    package_dir={'': 'lib'},
+    #package_dir={'': 'pythonpath'},
     install_requires=['lxml'],
     entry_points={
         'console_scripts': [
-            'noukaut = pythonpath.lib.nokaut.nokaut',
-            'bar = othermodule:somefunc',
+            'noukaut = pythonpath.lib.nokaut.nokaut'
         ],
     }
 )
