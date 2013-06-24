@@ -4,10 +4,16 @@ from lxml import etree
 import sys
 import getopt
 from decimal import Decimal
+import logging
 
 
-def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
-    """This function does something.
+logging.basicConfig(filename='pythonpath.log', level=logging.DEBUG)
+
+
+def get_price_and_url_from_nokaut(product_name='', nokaut_key=''):
+    """This function finds the lowest price offer of the product
+    and url of the shop from nokaut.pl. it is neccessary to have nokaut.pl
+    partnership key.
 
     :param product_name: The name of product to search for in nokaut.pl.
     :type product_name: str.
@@ -26,10 +32,6 @@ def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
     nokaut_url = 'http://api.nokaut.pl/?%s' % url_params
     response = urllib2.urlopen(nokaut_url)
     xml = response.read()
-
-    print xml
-    indent = ''
-
     root = etree.XML(xml)
     context = etree.iterwalk(root, events=("start", "end"),
                              tag=('item', 'price', 'product_id', 'shop_url'))
@@ -41,7 +43,7 @@ def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
 
     for action, elem in context:
         if (action == 'end' and elem.tag == 'item'):
-            (old_price, old_shop_url) = products.setdefault(product_id, 
+            (old_price, old_shop_url) = products.setdefault(product_id,
                                                             (price, shop_url))
             if (price < old_price):
                 products[product_id] = (price, shop_url)
@@ -52,25 +54,21 @@ def get_proce_and_url_from_nokaut(product_name='', nokaut_key=''):
         if (action == 'end' and elem.tag == 'shop_url'):
             shop_url = str(elem.text)
 
-        if (action == 'start'):
-            indent += '    '
-        if (action == 'end'):
-            print("    %s %s %s" % (indent, elem.tag, elem.text))
-            indent = indent[0:-4]
-
-    print(products)
+    logging.debug(products)
     if (len(products) == 0):
         return (None, None)
     return products.popitem()[1]
 
 
 def usage():
+    "usage of the command line"
+
     print("nokaut -p 'product_name' -k 'your_nokaut_key'")
 
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 
+        opts, args = getopt.getopt(sys.argv[1:],
                                    "hp:k:", ["help", "product=", "key="])
     except getopt.GetoptError as err:
         # print help information and exit:
@@ -97,7 +95,7 @@ def main():
         usage()
         sys.exit(2)
     else:
-        (price, url) = get_proce_and_url_from_nokaut(product_name=product,
+        (price, url) = get_price_and_url_from_nokaut(product_name=product,
                                                      nokaut_key=key)
         print(price, url)
 

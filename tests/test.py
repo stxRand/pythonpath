@@ -3,19 +3,20 @@ from mock import patch
 import sys
 from pythonpath import nokaut
 from decimal import Decimal
-
+from pythonpath import allegro
 
 class TestNokaut(unittest.TestCase):
+    """testing nokaut module"""
 
     def test_nokaut(self):
-        """testing get_proce_and_url_from_nokaut function from nokaut"""
+        """testing get_price_and_url_from_nokaut function from nokaut"""
 
-        (price, url) = nokaut.get_proce_and_url_from_nokaut(
+        (price, url) = nokaut.get_price_and_url_from_nokaut(
             product_name='Sony nex-7',
             nokaut_key='bad_key'
         )
         self.assertIsNone(price)
-        (price, url) = nokaut.get_proce_and_url_from_nokaut(
+        (price, url) = nokaut.get_price_and_url_from_nokaut(
             product_name='Sony nex-7',
             nokaut_key='a8839b1180ea00fa1cf7c6b74ca01bb5'
         )
@@ -28,7 +29,7 @@ class TestNokaut(unittest.TestCase):
                                 '-k', 'a8839b1180ea00fa1cf7c6b74ca01bb5'
                                 ])
     def test_nokaut_main1(self):
-        """testing get_proce_and_url_from_nokaut
+        """testing get_price_and_url_from_nokaut
         function through main function
 
         """
@@ -40,7 +41,7 @@ class TestNokaut(unittest.TestCase):
 
     @patch.object(sys, 'argv', ['nokaut', '-z'])
     def test_nokaut_main2(self):
-        """testing get_proce_and_url_from_nokaut 
+        """testing get_price_and_url_from_nokaut 
         function through main function
 
         """
@@ -68,11 +69,11 @@ class TestNokaut(unittest.TestCase):
             self.fail('SystemExit exception expected')
 
     def test_nokaut_commandline(self):
-        """testing get_proce_and_url_from_nokaut 
+        """testing get_price_and_url_from_nokaut
         function through command line
 
         """
-        
+
         import os
         err = os.system(
             "nokaut -p 'Sony nex-7' -k 'a8839b1180ea00fa1cf7c6b74ca01bb5'"
@@ -104,6 +105,34 @@ class TestNokaut(unittest.TestCase):
         )
         self.assertNotEqual(err, 0)
 
+
+class TestAllegro(unittest.TestCase):
+    """testing allegro module"""
+
+    def test_allegro(self):
+        """testing get_price_and_url_from_allegro function
+        from allegro module
+
+        """
+
+        (price, url) = allegro.get_price_and_url_from_allegro(
+            product_name='"Aparat Sony nex-7"')
+
+        self.assertIsInstance(price, Decimal)
+        self.assertTrue(price >= Decimal(0.0))
+        self.assertIsInstance(url, str)
+
+    def test_allegro_empty_search(self):
+        """testing get_price_and_url_from_allegro function
+        from allegro module with epmty search.
+
+        """
+
+        (price, url) = allegro.get_price_and_url_from_allegro(product_name='')
+
+        self.assertIsInstance(price, Decimal)
+        self.assertTrue(price >= Decimal(0.0))
+        self.assertIsInstance(url, str)
 
 if __name__ == '__main__':
     unittest.main()
