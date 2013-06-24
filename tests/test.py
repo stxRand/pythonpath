@@ -3,7 +3,8 @@ from mock import patch
 import sys
 from pythonpath import nokaut
 from decimal import Decimal
-from pythonpath import allegro
+from pythonpath.allegro import Allegro
+
 
 class TestNokaut(unittest.TestCase):
     """testing nokaut module"""
@@ -106,33 +107,36 @@ class TestNokaut(unittest.TestCase):
         self.assertNotEqual(err, 0)
 
 
-class TestAllegro(unittest.TestCase):
-    """testing allegro module"""
+class TestAllegroClass(unittest.TestCase):
+    """testing allegro class"""
 
-    def test_allegro(self):
-        """testing get_price_and_url_from_allegro function
-        from allegro module
+    def test_init(self):
+        allegro = Allegro('')
+        self.assertIsInstance(allegro, Allegro)
 
-        """
+    def test_search(self):
+        """testing allegro class offer search"""
 
-        (price, url) = allegro.get_price_and_url_from_allegro(
-            product_name='"Aparat Sony nex-7"')
+        allegro = Allegro('"Aparat Sony nex-7"')
+        price = allegro.get_lowest_price()
+        url = allegro.get_offer_url()
+
+        self.assertIsInstance(price, Decimal)
+        self.assertTrue(price >= Decimal(0.0))
+        self.assertIsInstance(url, str)
+        self.assertNotEqual(url, '')
+
+    def test_empty_search(self):
+        """testing allegro class offer empty string search"""
+
+        allegro = Allegro('')
+        price = allegro.get_lowest_price()
+        url = allegro.get_offer_url()
 
         self.assertIsInstance(price, Decimal)
         self.assertTrue(price >= Decimal(0.0))
         self.assertIsInstance(url, str)
 
-    def test_allegro_empty_search(self):
-        """testing get_price_and_url_from_allegro function
-        from allegro module with epmty search.
-
-        """
-
-        (price, url) = allegro.get_price_and_url_from_allegro(product_name='')
-
-        self.assertIsInstance(price, Decimal)
-        self.assertTrue(price >= Decimal(0.0))
-        self.assertIsInstance(url, str)
 
 if __name__ == '__main__':
     unittest.main()
