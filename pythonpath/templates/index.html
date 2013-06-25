@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<head>
+  <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+</head>
+
+{% autoescape true %}
+<html>
+  <body>
+    <a href="{{ url|safe }}">{{ url_linktext }}</a>
+
+    <hr>
+
+    <p>Product to comapre:<p>
+
+    <form action="/compare" method="get">
+      <div><input type='text' name="product" size="30" value=" {{ product }} "></div>
+      <div><input type="submit" value="Find offers"></div>
+    </form>
+
+  </body>
+</html>
+{% endautoescape %}
