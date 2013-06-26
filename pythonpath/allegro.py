@@ -1,8 +1,14 @@
 from decimal import Decimal
-import mechanize
 import urllib
 import logging
-from BeautifulSoup import BeautifulSoup
+try:
+    import mechanize
+    from BeautifulSoup import BeautifulSoup
+except ImportError:
+    import sys
+    sys.path.insert(0, 'libs')
+    import mechanize
+    from bs4 import BeautifulSoup
 
 logging.basicConfig(filename='pythonpath.log', level=logging.DEBUG)
 
@@ -12,7 +18,6 @@ class Allegro(object):
     with the lowest price"""
 
     def __init__(self, product_name=''):
-        super(Allegro, self).__init__()
         self.product_name = product_name
         self._price = Decimal(0.0)
         self._url = ''
@@ -100,7 +105,7 @@ class Allegro(object):
         header = section.find('header')
         url = header.find('a', href=True)['href']
         if (url != ''):
-            url = 'www.allegro.pl%s' % url
+            url = 'http://www.allegro.pl%s' % url
         return str(url)
 
     def __parse_price(self, section):

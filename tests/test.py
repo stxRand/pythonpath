@@ -1,39 +1,22 @@
 import unittest
 from mock import patch
 import sys
-from pythonpath import nokaut
 from decimal import Decimal
 from pythonpath.allegro import Allegro
+from pythonpath.nokaut import Nokaut
+from pythonpath import nokaut
+from pythonpath import settings
 
 
 class TestNokaut(unittest.TestCase):
     """testing nokaut module"""
 
-    def test_nokaut(self):
-        """testing get_price_and_url_from_nokaut function from nokaut"""
-
-        (price, url) = nokaut.get_price_and_url_from_nokaut(
-            product_name='Sony nex-7',
-            nokaut_key='bad_key'
-        )
-        self.assertIsNone(price)
-        (price, url) = nokaut.get_price_and_url_from_nokaut(
-            product_name='Sony nex-7',
-            nokaut_key='a8839b1180ea00fa1cf7c6b74ca01bb5'
-        )
-        self.assertIsInstance(price, Decimal)
-        self.assertTrue(price >= Decimal(0.0))
-        self.assertIsInstance(url, str)
-
     @patch.object(sys, 'argv', ['nokaut',
                                 '-p', 'Sony nex-7',
-                                '-k', 'a8839b1180ea00fa1cf7c6b74ca01bb5'
+                                '-k', settings.NOKAUT_KEY
                                 ])
     def test_nokaut_main1(self):
-        """testing get_price_and_url_from_nokaut
-        function through main function
-
-        """
+        """testing nokaut class through main function"""
 
         try:
             nokaut.main()
@@ -42,10 +25,7 @@ class TestNokaut(unittest.TestCase):
 
     @patch.object(sys, 'argv', ['nokaut', '-z'])
     def test_nokaut_main2(self):
-        """testing get_price_and_url_from_nokaut 
-        function through main function
-
-        """
+        """testing nokaut class through main function"""
 
         try:
             nokaut.main()
@@ -70,19 +50,16 @@ class TestNokaut(unittest.TestCase):
             self.fail('SystemExit exception expected')
 
     def test_nokaut_commandline(self):
-        """testing get_price_and_url_from_nokaut
-        function through command line
-
-        """
+        """testing nokaut class through command line"""
 
         import os
         err = os.system(
-            "nokaut -p 'Sony nex-7' -k 'a8839b1180ea00fa1cf7c6b74ca01bb5'"
+            "nokaut -p 'Sony nex-7' -k '%s'" % settings.NOKAUT_KEY
         )
         self.assertEqual(err, 0)
 
         err = os.system(
-            "nokaut -p 'Sony nex-7' -k 'a8839b1180ea00fa1cf7c6b74ca01bb5' -z"
+            "nokaut -p 'Sony nex-7' -k '%s' -z" % settings.NOKAUT_KEY
         )
         self.assertNotEqual(err, 0)
 
@@ -92,7 +69,7 @@ class TestNokaut(unittest.TestCase):
         self.assertNotEqual(err, 0)
 
         err = os.system(
-            "nokaut -k 'a8839b1180ea00fa1cf7c6b74ca01bb5'"
+            "nokaut -k '%s'" % settings.NOKAUT_KEY
         )
         self.assertNotEqual(err, 0)
 
@@ -105,6 +82,37 @@ class TestNokaut(unittest.TestCase):
             "nokaut -z"
         )
         self.assertNotEqual(err, 0)
+
+
+class TestNokautClass(unittest.TestCase):
+    """testing nokaut class"""
+
+    def test_init(self):
+        nokaut = Nokaut('')
+        self.assertIsInstance(nokaut, Nokaut)
+
+    def test_search(self):
+        """testing nokaut class offer search"""
+
+        nokaut_search = Nokaut('Aparat Sony nex-7', settings.NOKAUT_KEY)
+        price = nokaut_search.get_lowest_price()
+        url = nokaut_search.get_offer_url()
+
+        self.assertIsInstance(price, Decimal)
+        self.assertTrue(price >= Decimal(0.0))
+        self.assertIsInstance(url, str)
+        self.assertNotEqual(url, '')
+
+    def test_empty_search(self):
+        """testing nokaut class offer empty string search"""
+
+        nokaut = Nokaut('', settings.NOKAUT_KEY)
+        price = nokaut.get_lowest_price()
+        url = nokaut.get_offer_url()
+
+        self.assertIsInstance(price, Decimal)
+        self.assertTrue(price >= Decimal(0.0))
+        self.assertIsInstance(url, str)
 
 
 class TestAllegroClass(unittest.TestCase):

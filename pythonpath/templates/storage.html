@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<head>
+  <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+</head>
+
+{% autoescape true %}
+<html>
+  <body>
+
+    <a href="{{ url|safe }}">{{ url_linktext }}</a>
+
+    <hr>
+
+    {% for search in searches %}
+    <p>
+      Author:
+      {% if search.author %}
+        <b>{{ search.author.nickname() }}</b>
+      {% endif %} </br>
+      Query: {{ search.product_name }} </br>
+      Date: {{ search.date }} </br>
+    </p>
+    <hr>
+    {% endfor %}
+
+  </body>
+</html>
+{% endautoescape %}
