@@ -2,7 +2,7 @@ import urllib2
 import urllib
 from lxml import etree
 import sys
-import getopt
+import argparse
 import logging
 from decimal import Decimal
 
@@ -127,44 +127,29 @@ class Nokaut(OfferProvider):
         return ''
 
 
-def usage():
-    "usage of the command line"
-
-    print("nokaut -p 'product_name' -k 'your_nokaut_key'")
+class ArgumentParserHelpError(argparse.ArgumentParser):
+    def print_help(self, file=None):
+        super(ArgumentParserHelpError,self).print_help(file)
+        sys.exit(1)
 
 
 def main():
+    parser = ArgumentParserHelpError(
+        description='Get the best offer from Nokaut.'
+    )
+    parser.add_argument('-p', '--product', type=str,
+                       help='name of a product to search', required=True)
+    parser.add_argument('-k', '--key', type=str,
+                       help='nokaut partnership key', required=True)
+    args = parser.parse_args()
+
     try:
-        opts, args = getopt.getopt(sys.argv[1:],
-                                   "hp:k:", ["help", "product=", "key="])
-    except getopt.GetoptError as err:
-        # print help information and exit:
-        print(str(err))  # will print something like "option -a not recognized"
-        usage()
-        sys.exit(2)
-
-    key = None
-    product = None
-
-    for opt, arg in opts:
-        if (opt in ("-h", "--help")):
-            usage()
-            sys.exit(1)
-        elif (opt in ("-p", "--product")):
-            product = arg
-        elif (opt in ("-k", "--key")):
-            key = arg
-        else:
-            usage()
-            sys.exit(2)
-
-    if (key is None or product is None):
-        usage()
-        sys.exit(2)
-    else:
-        nokaut_search = Nokaut(product_name=product, nokaut_key=key)
+        nokaut_search = Nokaut(product_name=args.product, nokaut_key=args.key)
         (price, url) = nokaut_search.search()
         print(price, url)
+    except argparse.ArgumentError, err:
+        print(err.message)
+        sys.exit(2)
 
 
 if __name__ == "__main__":
