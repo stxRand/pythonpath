@@ -32,7 +32,7 @@
     <hr>
 
     <p>
-    Your last searches:
+    Your last searches: </br>
     {% for search in last_searches %}
       <a href="/compare?product={{ search.product_name.lstrip().rstrip()|urlencode }}"> {{ search.product_name }} </a> </br>
     {% endfor %}

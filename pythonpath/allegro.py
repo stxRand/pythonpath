@@ -1,19 +1,21 @@
-from decimal import Decimal
 import urllib
 import logging
-try:
-    import mechanize
-    from BeautifulSoup import BeautifulSoup
-except ImportError:
-    import sys
-    sys.path.insert(0, 'libs')
-    import mechanize
-    from bs4 import BeautifulSoup
+from decimal import Decimal
+
+import sys
+import os
+sys.path.insert(0, 'libs')
+sys.path.insert(0, os.path.join('pythonpath','libs'))
+import mechanize
+from bs4 import BeautifulSoup
+
+from offer_provider import OfferProvider
+
 
 logging.basicConfig(filename='pythonpath.log', level=logging.DEBUG)
 
 
-class Allegro(object):
+class Allegro(OfferProvider):
     """The class allow to search for a product in the allegro.pl
     with the lowest price"""
 
@@ -21,7 +23,6 @@ class Allegro(object):
         self.product_name = product_name
         self._price = Decimal(0.0)
         self._url = ''
-        self.search()
 
     def search(self, product_name=None):
         """Finds a offer of product with the lowest price in the
@@ -43,14 +44,15 @@ class Allegro(object):
         (self._price, self._url) = self.__find_price_and_url_in_html(html)
 
         logging.debug((self._price, self._url))
+        return (self._price, self._url)
 
     def get_lowest_price(self):
-        "Returns the lowest price from the last search"
+        """Returns the lowest price from the last search"""
 
         return self._price
 
     def get_offer_url(self):
-        "Returns a offer url from the last search"
+        """Returns a offer url from the last search"""
 
         return self._url
 

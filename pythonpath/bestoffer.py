@@ -3,8 +3,9 @@ import urllib
 import datetime
 
 from google.appengine.api import users
-import jinja2
+
 import webapp2
+from webapp2_extras import jinja2
 
 import settings
 from allegro import Allegro
@@ -12,36 +13,40 @@ from nokaut import Nokaut
 from model import Search
 from model import SearchCache
 
-JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')),
-    extensions=['jinja2.ext.autoescape'])
-JINJA_ENVIRONMENT.filters.update(dict(urlencode = urllib.quote))
+class BaseHandler(webapp2.RequestHandler):
 
+    @webapp2.cached_property
+    def jinja2(self):
+        # Returns a Jinja2 renderer cached in the app registry.
+        jinja = jinja2.get_jinja2(app=self.app)
+        jinja.environment.filters.update(dict(urlencode = urllib.quote))
+        return jinja
 
-def render_template(template, **params):
-    template = JINJA_ENVIRONMENT.get_template(template)
-    return template.render(params)
+    def render_response(self, _template, **context):
+        # Renders a template and writes the result to the response.
+        rv = self.jinja2.render_template(_template, **context)
+        self.response.write(rv)
 
-def get_login_url_and_text(uri):
-    url = ''
-    url_linktext = ''
-    if users.get_current_user():
-        url = users.create_logout_url(uri)
-        url_linktext = 'Logout'
-    else:
-        url = users.create_login_url(uri)
-        url_linktext = 'Login'
-    return (url, url_linktext)
+    def get_login_url_and_text(self, uri):
+        url = ''
+        url_linktext = ''
+        if users.get_current_user():
+            url = users.create_logout_url(uri)
+            url_linktext = 'Logout'
+        else:
+            url = users.create_login_url(uri)
+            url_linktext = 'Login'
+        return (url, url_linktext)
 
 def encode_url(tag, text):
     return urllib.urlencode({tag: text})
 
 
-class MainPage(webapp2.RequestHandler):
+class MainPage(BaseHandler):
 
     def get(self):
 
-        (url, url_linktext) = get_login_url_and_text(self.request.uri)
+        (url, url_linktext) = self.get_login_url_and_text(self.request.uri)
 
         template_values = {
             'product': '',
@@ -49,16 +54,16 @@ class MainPage(webapp2.RequestHandler):
             'url_linktext': url_linktext,
         }
 
-        self.response.write(render_template('index.html', **template_values))
+        self.render_response('index.html', **template_values)
 
 
-class Compare(webapp2.RequestHandler):
+class Compare(BaseHandler):
 
     def get(self):
         product_name = self.request.get('product', '')
         product_name.rstrip().lstrip()
 
-        (url, url_linktext) = get_login_url_and_text(self.request.uri)
+        (url, url_linktext) = self.get_login_url_and_text(self.request.uri)
 
         user_nick = self.__get_user_nickname()
 
@@ -115,7 +120,7 @@ class Compare(webapp2.RequestHandler):
             'last_searches_url': last_searches_url
         }
 
-        self.response.write(render_template('search.html', **template_values))
+        self.render_response('search.html', **template_values)
 
     def __get_user_id(self):
         user = users.get_current_user()
@@ -176,18 +181,18 @@ class Compare(webapp2.RequestHandler):
 
     def __get_price_and_url_from_allegro(self, product_name):
         allegro = Allegro('"%s"' % product_name)
-        return (allegro.get_lowest_price(), allegro.get_offer_url())
+        return allegro.search()
 
     def __get_price_and_url_from_nokaut(self, product_name):
         nokaut = Nokaut(product_name, settings.NOKAUT_KEY)
-        return (nokaut.get_lowest_price(), nokaut.get_offer_url())
+        return nokaut.search()
 
 
-class Storage(webapp2.RequestHandler):
+class Storage(BaseHandler):
 
     def get(self):
 
-        (url, url_linktext) = get_login_url_and_text(self.request.uri)
+        (url, url_linktext) = self.get_login_url_and_text(self.request.uri)
 
         search_query = Search.query().order(-Search.date)
         search_query = search_query.fetch(10)
@@ -198,7 +203,7 @@ class Storage(webapp2.RequestHandler):
             'url_linktext': url_linktext,
         }
 
-        self.response.write(render_template('storage.html', **template_values))
+        self.render_response('storage.html', **template_values)
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),

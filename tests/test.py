@@ -87,14 +87,11 @@ class TestNokaut(unittest.TestCase):
 class TestNokautClass(unittest.TestCase):
     """testing nokaut class"""
 
-    def test_init(self):
-        nokaut = Nokaut('')
-        self.assertIsInstance(nokaut, Nokaut)
-
     def test_search(self):
         """testing nokaut class offer search"""
 
         nokaut_search = Nokaut('Aparat Sony nex-7', settings.NOKAUT_KEY)
+        nokaut_search.search()
         price = nokaut_search.get_lowest_price()
         url = nokaut_search.get_offer_url()
 
@@ -107,6 +104,7 @@ class TestNokautClass(unittest.TestCase):
         """testing nokaut class offer empty string search"""
 
         nokaut = Nokaut('', settings.NOKAUT_KEY)
+        nokaut.search()
         price = nokaut.get_lowest_price()
         url = nokaut.get_offer_url()
 
@@ -118,14 +116,11 @@ class TestNokautClass(unittest.TestCase):
 class TestAllegroClass(unittest.TestCase):
     """testing allegro class"""
 
-    def test_init(self):
-        allegro = Allegro('')
-        self.assertIsInstance(allegro, Allegro)
-
     def test_search(self):
         """testing allegro class offer search"""
 
         allegro = Allegro('"Aparat Sony nex-7"')
+        allegro.search()
         price = allegro.get_lowest_price()
         url = allegro.get_offer_url()
 
@@ -138,6 +133,7 @@ class TestAllegroClass(unittest.TestCase):
         """testing allegro class offer empty string search"""
 
         allegro = Allegro('')
+        allegro.search()
         price = allegro.get_lowest_price()
         url = allegro.get_offer_url()
 

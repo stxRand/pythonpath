@@ -3,14 +3,16 @@ import urllib
 from lxml import etree
 import sys
 import getopt
-from decimal import Decimal
 import logging
+from decimal import Decimal
+
+from offer_provider import OfferProvider
 
 
 logging.basicConfig(filename='pythonpath.log', level=logging.DEBUG)
 
 
-class Nokaut(object):
+class Nokaut(OfferProvider):
     """The class allow to search for a product in the nokaut.pl
     with the lowest price"""
 
@@ -19,7 +21,6 @@ class Nokaut(object):
         self.nokaut_key = nokaut_key
         self._price = Decimal(0.0)
         self._url = ''
-        self.search()
 
     def search(self, product_name=None):
         """Finds a offer of product with the lowest price in the
@@ -60,6 +61,8 @@ class Nokaut(object):
         self._url = self.__get_product_url_form_xml_context(context)
 
         logging.debug((self._price, self._url))
+
+        return (self._price, self._url)
 
     def get_lowest_price(self):
         "Returns the lowest price from the last search"
@@ -160,8 +163,7 @@ def main():
         sys.exit(2)
     else:
         nokaut_search = Nokaut(product_name=product, nokaut_key=key)
-        price = nokaut_search.get_lowest_price()
-        url = nokaut_search.get_offer_url()
+        (price, url) = nokaut_search.search()
         print(price, url)
 
 

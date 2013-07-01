@@ -1,3 +1,10 @@
-Python Path 
+Python Path
 
-The simple web application to compare products prices form www.allegro.pl and nokaut.pl.
+The simple web application to compare products prices form www.allegro.pl
+and nokaut.pl.
+
+CONFIG
+
+You should set up:
+  NOKAUT_KEY
+in settings_local.py to your nokaut partnership key.
