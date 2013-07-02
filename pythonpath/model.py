@@ -43,3 +43,4 @@ class SearchCache(ndb.Model):
     allegro_url = ndb.StringProperty()
     nokaut_price = DecimalProperty()
     nokaut_url = ndb.StringProperty()
+    search_count = ndb.IntegerProperty()

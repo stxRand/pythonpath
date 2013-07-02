@@ -17,6 +17,13 @@
       <div><input type="submit" value="Find offers"></div>
     </form>
 
+    <hr>
+    <p>Most popular searches:</p>
+    {% for search_cache in most_popular_search %}
+      <p>
+        {{ search_cache.product_name }} : {{ search_cache.search_count }}
+      </p>
+    {% endfor %}
   </body>
 </html>
 {% endautoescape %}

@@ -43,12 +43,12 @@ class Nokaut(OfferProvider):
             self.product_name
         )
         (product_id, self._price, shop_url) = \
-            self.__get_productid_price_and_url_with_xpath(xml)
+            self.__get_productid_price_and_url(xml)
 
         xml = self.__get_xml_with_nokaut_api(
             'nokaut.Product.getById', 'id', product_id
         )
-        self._url = self.__get_product_url_with_xpath(xml)
+        self._url = self.__get_product_url(xml)
 
         logging.debug((self._price, self._url))
 
@@ -79,7 +79,7 @@ class Nokaut(OfferProvider):
         response = urllib2.urlopen(nokaut_url)
         return response.read()
 
-    def __get_productid_price_and_url_with_xpath(self, xml):
+    def __get_productid_price_and_url(self, xml):
         products = {}
         price = Decimal(0.0)
         shop_url = ''
@@ -102,7 +102,7 @@ class Nokaut(OfferProvider):
         (product_id, price_and_url) = products.popitem()
         return (product_id, price_and_url[0], price_and_url[1])
 
-    def __get_product_url_with_xpath(self, xml):
+    def __get_product_url(self, xml):
         xml = etree.fromstring(xml)
         url = ''
         for product_url in xml.xpath(".//url/text()"):
