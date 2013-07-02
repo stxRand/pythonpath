@@ -42,35 +42,25 @@ class Nokaut(OfferProvider):
             'name',
             self.product_name
         )
-        context = self.__get_xml_iter_context(
-            xml,
-            tag_list=('item', 'price', 'product_id',
-                      'shop_url')
-        )
-
         (product_id, self._price, shop_url) = \
-            self.__get_poduct_id_price_shop_url_from_xml_context(context)
+            self.__get_productid_price_and_url_with_xpath(xml)
 
         xml = self.__get_xml_with_nokaut_api(
-            'nokaut.Product.getById',
-            'id',
-            product_id
+            'nokaut.Product.getById', 'id', product_id
         )
-        context = self.__get_xml_iter_context(xml,
-                                              tag_list=('item', 'url'))
-        self._url = self.__get_product_url_form_xml_context(context)
+        self._url = self.__get_product_url_with_xpath(xml)
 
         logging.debug((self._price, self._url))
 
         return (self._price, self._url)
 
     def get_lowest_price(self):
-        "Returns the lowest price from the last search"
+        """Returns the lowest price from the last search"""
 
         return self._price
 
     def get_offer_url(self):
-        "Returns a product url from the last search"
+        """Returns a product url from the last search"""
 
         return self._url
 
@@ -89,30 +79,22 @@ class Nokaut(OfferProvider):
         response = urllib2.urlopen(nokaut_url)
         return response.read()
 
-    def __get_xml_iter_context(self, xml, tag_list):
-        root = etree.XML(xml)
-        return etree.iterwalk(root, events=("start", "end"),
-                              tag=tag_list)
-
-    def __get_poduct_id_price_shop_url_from_xml_context(self, context):
+    def __get_productid_price_and_url_with_xpath(self, xml):
         products = {}
         price = Decimal(0.0)
         shop_url = ''
         product_id = 0
 
-        for action, elem in context:
-            if (action == 'end'):
-                if (elem.tag == 'item'):
-                    (old_price, old_shop_url) = products.setdefault(product_id,
-                                                                    (price, shop_url))
-                    if (price < old_price):
-                        products[product_id] = (price, shop_url)
-                elif (elem.tag == 'price'):
-                    price = Decimal(elem.text.replace(',', '.'))
-                elif (elem.tag == 'product_id'):
-                    product_id = int(elem.text)
-                elif (elem.tag == 'shop_url'):
-                    shop_url = str(elem.text)
+        xml = etree.fromstring(xml)
+        for item in xml.xpath(".//item"):
+            price = item.findtext("price").replace(',', '.')
+            price = Decimal(price)
+            product_id = int(item.findtext("product_id"))
+            shop_url = str(item.findtext("shop_url"))
+            (tmp_price, tmp_shop_url) = \
+                products.setdefault(product_id, (price, shop_url))
+            if (price < tmp_price):
+                products[product_id] = (price, shop_url)
 
         logging.debug(products)
         if (len(products) == 0):
@@ -120,12 +102,13 @@ class Nokaut(OfferProvider):
         (product_id, price_and_url) = products.popitem()
         return (product_id, price_and_url[0], price_and_url[1])
 
-    def __get_product_url_form_xml_context(self, context):
-        for action, elem in context:
-            if (action == 'end' and elem.tag == 'url'):
-                return str(elem.text)
-        return ''
-
+    def __get_product_url_with_xpath(self, xml):
+        xml = etree.fromstring(xml)
+        url = ''
+        for product_url in xml.xpath(".//url/text()"):
+            url = str(product_url)
+        logging.debug(url)
+        return url
 
 class ArgumentParserHelpError(argparse.ArgumentParser):
     def print_help(self, file=None):
