@@ -2226,3 +2226,442 @@ offerTypeBuyNow=1&order=q&standard_allegro=1&string=%22Aparat+Sony+nex-7%22"><sp
 </body>
 </html>
 """
+
+GET_PRICE_NOKAUT_RESPONSE = """<?xml version="1.0" encoding="UTF-8"?>
+<success>
+    <items>
+        <item>
+            <id>25800505089</id>
+            <shop_name>Agito.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/258.jpg?1356004557</shop_logo>
+            <shop_id>258</shop_id>
+            <shop_url>http://www.agito.pl</shop_url>
+            <nokaut_shop_url>agito-pl/</nokaut_shop_url>
+            <price>4219,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>0</availability>
+            <description>Efektywna rozdzielczość </description>
+            <image>http://nokautimg3.pl/p/bd/6b/bd6b925ba89957293848e4ba22ac46af130x130.jpg</image>
+        </item>
+        <item>
+            <id>44300005812</id>
+            <shop_name>Cyfrowe.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/443.jpg?1358166488</shop_logo>
+            <shop_id>443</shop_id>
+            <shop_url>http://www.cyfrowe.pl</shop_url>
+            <nokaut_shop_url>cyfrowe-pl/</nokaut_shop_url>
+            <price>4199,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>1</availability>
+            <description>ccAparat kompaktowy z wymienna optyka wyposażony w matrycę APS-C o rozdzielczości 24mln. pikseli. Oprzcz typowych zdjęć, pozwala na tworzenie panoram ,</description>
+            <image>http://nokautimg1.pl/p/4e/a0/4ea0c86a030c7ed0ffa3f9576cea21d5130x130.jpg</image>
+        </item>
+        <item>
+            <id>44300012093</id>
+            <shop_name>Cyfrowe.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/443.jpg?1358166488</shop_logo>
+            <shop_id>443</shop_id>
+            <shop_url>http://www.cyfrowe.pl</shop_url>
+            <nokaut_shop_url>cyfrowe-pl/</nokaut_shop_url>
+            <price>3699,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>1</availability>
+            <description>ccAparat kompaktowy</description>
+            <image>http://nokautimg2.pl/p/11/75/1175dadaa3cbe269b88ab585bb55183a130x130.jpg</image>
+        </item>
+        <item>
+            <id>399601002444</id>
+            <shop_name>redcoon.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/3996.jpg?1366020069</shop_logo>
+            <shop_id>3996</shop_id>
+            <shop_url>http://www.redcoon.pl</shop_url>
+            <nokaut_shop_url>redcoon-pl/</nokaut_shop_url>
+            <price>5108,60</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>4</availability>
+            <description></description>
+            <image>http://nokautimg1.pl/p/86/f2/86f28f0ed946b0d3ce4448fcbf2c7c52130x130.jpg</image>
+        </item>
+        <item>
+            <id>399601507165</id>
+            <shop_name>redcoon.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/3996.jpg?1366020069</shop_logo>
+            <shop_id>3996</shop_id>
+            <shop_url>http://www.redcoon.pl</shop_url>
+            <nokaut_shop_url>redcoon-pl/</nokaut_shop_url>
+            <price>4885,60</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>0</availability>
+            <description></description>
+            <image>http://nokautimg1.pl/p/86/f2/86f28f0ed946b0d3ce4448fcbf2c7c52130x130.jpg</image>
+        </item>
+        <item>
+            <id>399601504791</id>
+            <shop_name>redcoon.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/3996.jpg?1366020069</shop_logo>
+            <shop_id>3996</shop_id>
+            <shop_url>http://www.redcoon.pl</shop_url>
+            <nokaut_shop_url>redcoon-pl/</nokaut_shop_url>
+            <price>4799,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>0</availability>
+            <description></description>
+            <image>http://nokautimg1.pl/p/86/f2/86f28f0ed946b0d3ce4448fcbf2c7c52130x130.jpg</image>
+        </item>
+        <item>
+            <id>1728700504956</id>
+            <shop_name>Karen.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/17287.jpg?1356016065</shop_logo>
+            <shop_id>17287</shop_id>
+            <shop_url>http://www.karen.pl</shop_url>
+            <nokaut_shop_url>karen-pl/</nokaut_shop_url>
+            <price>4699,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability></availability>
+            <description>Doskonały styl, profesjonalna jakość</description>
+            <image>http://nokautimg2.pl/p/1f/a5/1fa555f90402a230400c2f2eeaf46778130x130.jpg</image>
+        </item>
+        <item>
+            <id>1728701502709</id>
+            <shop_name>Karen.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/17287.jpg?1356016065</shop_logo>
+            <shop_id>17287</shop_id>
+            <shop_url>http://www.karen.pl</shop_url>
+            <nokaut_shop_url>karen-pl/</nokaut_shop_url>
+            <price>4649,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability></availability>
+            <description>Doskonały styl, profesjonalna jakość</description>
+            <image>http://nokautimg1.pl/p/d0/6e/d06e910cd393c47ec4d4042c909d1cdd130x130.jpg</image>
+        </item>
+        <item>
+            <id>1717500001411</id>
+            <shop_name>ProClub - Profesjonalny Sklep Fotograficzny</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/17175.jpg?1372055965</shop_logo>
+            <shop_id>17175</shop_id>
+            <shop_url>http://www.proclub.pl</shop_url>
+            <nokaut_shop_url>proclub-pl/</nokaut_shop_url>
+            <price>5239,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>1</availability>
+            <description>Obraz jak z lustrzanki bez wymiarów ani wagi</description>
+            <image>http://nokautimg3.pl/p/fa/46/fa464c2e3e1d27c5ac3003f0923912f2130x130.jpg</image>
+        </item>
+        <item>
+            <id>1842001002782</id>
+            <shop_name>Saturn</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/18420.png?1356016813</shop_logo>
+            <shop_id>18420</shop_id>
+            <shop_url>http://www.saturn.pl</shop_url>
+            <nokaut_shop_url>saturn-pl/</nokaut_shop_url>
+            <price>4029,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>0</availability>
+            <description>Aparat hybrydowy SONY NEX-7K</description>
+            <image>http://nokautimg4.pl/p/ca/0b/ca0b50d69b0e60f36479ae907c8c7021130x130.jpg</image>
+        </item>
+        <item>
+            <id>1842001504472</id>
+            <shop_name>Saturn</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/18420.png?1356016813</shop_logo>
+            <shop_id>18420</shop_id>
+            <shop_url>http://www.saturn.pl</shop_url>
+            <nokaut_shop_url>saturn-pl/</nokaut_shop_url>
+            <price>3999,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>0</availability>
+            <description>Aparat hybrydowy SONY NEX-7KB (Torba LCS-EMC)</description>
+            <image>http://nokautimg3.pl/p/2a/8f/2a8f27e70a2124a0ec2692520ee06b9c130x130.jpg</image>
+        </item>
+        <item>
+            <id>1842000502399</id>
+            <shop_name>Saturn</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/18420.png?1356016813</shop_logo>
+            <shop_id>18420</shop_id>
+            <shop_url>http://www.saturn.pl</shop_url>
+            <nokaut_shop_url>saturn-pl/</nokaut_shop_url>
+            <price>3798,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>4</availability>
+            <description>Aparat hybrydowy SONY NEX-7</description>
+            <image>http://nokautimg4.pl/p/3d/d5/3dd5a93fbde194b71f887a5856a03551130x130.jpg</image>
+        </item>
+        <item>
+            <id>1286600000169</id>
+            <shop_name>Firma Fotograficzna Fotos cyfrowa.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/12866.gif?1367832129</shop_logo>
+            <shop_id>12866</shop_id>
+            <shop_url>http://www.cyfrowa.pl</shop_url>
+            <nokaut_shop_url>cyfrowa-pl/</nokaut_shop_url>
+            <price>4848,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>4</availability>
+            <description>NEX-7K z obiektywem 18-55mm</description>
+            <image>http://nokautimg1.pl/p/80/f0/80f0e480b6bdb8ad0cbd1ec01483ac16130x130.jpg</image>
+        </item>
+        <item>
+            <id>1286600000117</id>
+            <shop_name>Firma Fotograficzna Fotos cyfrowa.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/12866.gif?1367832129</shop_logo>
+            <shop_id>12866</shop_id>
+            <shop_url>http://www.cyfrowa.pl</shop_url>
+            <nokaut_shop_url>cyfrowa-pl/</nokaut_shop_url>
+            <price>4444,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>4</availability>
+            <description>NEX-7 body</description>
+            <image>http://nokautimg2.pl/p/1b/86/1b86c117aaf10be00f2c698bbe665bf4130x130.jpg</image>
+        </item>
+        <item>
+            <id>1881601011080</id>
+            <shop_name>MediaMarkt.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/18816.jpg?1356017082</shop_logo>
+            <shop_id>18816</shop_id>
+            <shop_url>http://www.mediamarkt.pl/</shop_url>
+            <nokaut_shop_url>mediamarkt-pl/</nokaut_shop_url>
+            <price>4999,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>0</availability>
+            <description>Aparat hybrydowy SONY NEX-7KB (Torba LCS-EMC)</description>
+            <image>http://nokautimg1.pl/p/04/48/0448e4a2203ea73239bb83324d8ecd91130x130.jpg</image>
+        </item>
+        <item>
+            <id>141500004493</id>
+            <shop_name>Komputronik.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/1415.png?1356005286</shop_logo>
+            <shop_id>1415</shop_id>
+            <shop_url>http://www.komputronik.pl</shop_url>
+            <nokaut_shop_url>komputronik-pl/</nokaut_shop_url>
+            <price>4649,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability></availability>
+            <description>Doskonały styl, profesjonalna jakość</description>
+            <image>http://nokautimg1.pl/p/db/fe/dbfedf5ad799ee0bb4e3e33079bd2478130x130.jpg</image>
+        </item>
+        <item>
+            <id>141500503753</id>
+            <shop_name>Komputronik.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/1415.png?1356005286</shop_logo>
+            <shop_id>1415</shop_id>
+            <shop_url>http://www.komputronik.pl</shop_url>
+            <nokaut_shop_url>komputronik-pl/</nokaut_shop_url>
+            <price>4699,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability></availability>
+            <description>Doskonały styl, profesjonalna jakość</description>
+            <image>http://nokautimg1.pl/p/07/ba/07ba84f154d42451ca3e6a2a2f384395130x130.jpg</image>
+        </item>
+        <item>
+            <id>1596900000244</id>
+            <shop_name>RYSPOL</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/15969.png?1367829176</shop_logo>
+            <shop_id>15969</shop_id>
+            <shop_url>http://www.ryspol.net.pl</shop_url>
+            <nokaut_shop_url>ryspol-net-pl/</nokaut_shop_url>
+            <price>4799,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>0</availability>
+            <description>24,3 megapiksela, Full HD AVCHD, 25 </description>
+            <image>http://nokautimg1.pl/p/da/04/da04876cc30f114aa26d114376df23c7130x130.jpg</image>
+        </item>
+        <item>
+            <id>141501003508</id>
+            <shop_name>Komputronik.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/1415.png?1356005286</shop_logo>
+            <shop_id>1415</shop_id>
+            <shop_url>http://www.komputronik.pl</shop_url>
+            <nokaut_shop_url>komputronik-pl/</nokaut_shop_url>
+            <price>5590,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability></availability>
+            <description>Doskonały styl, profesjonalna jakość</description>
+            <image>http://nokautimg1.pl/p/8e/0f/8e0f636ecffac4612172a69648ccc8d6130x130.jpg</image>
+        </item>
+        <item>
+            <id>1881600507380</id>
+            <shop_name>MediaMarkt.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/18816.jpg?1356017082</shop_logo>
+            <shop_id>18816</shop_id>
+            <shop_url>http://www.mediamarkt.pl/</shop_url>
+            <nokaut_shop_url>mediamarkt-pl/</nokaut_shop_url>
+            <price>4199,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>4</availability>
+            <description>Aparat hybrydowy SONY NEX-7</description>
+            <image>http://nokautimg2.pl/p/5b/c6/5bc653c10c753336aa0be8607c1b9164130x130.jpg</image>
+        </item>
+        <item>
+            <id>39201501382</id>
+            <shop_name>Morele.net S.J.</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/392.gif?1356004637</shop_logo>
+            <shop_id>392</shop_id>
+            <shop_url>http://www.morele.net</shop_url>
+            <nokaut_shop_url>sklep-morele-net/</nokaut_shop_url>
+            <price>4412,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>4</availability>
+            <description></description>
+            <image>http://nokautimg3.pl/p/65/3a/653aa861097c932ccf66238784c4413b130x130.jpg</image>
+        </item>
+        <item>
+            <id>748800000261</id>
+            <shop_name>e-fotojoker.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/7488.png?1369139312</shop_logo>
+            <shop_id>7488</shop_id>
+            <shop_url>http://www.e-fotojoker.pl</shop_url>
+            <nokaut_shop_url>e-fotojoker-pl/</nokaut_shop_url>
+            <price>3988,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability></availability>
+            <description></description>
+            <image>http://nokautimg3.pl/p/f3/56/f356f792620d8da6a872a2bb4c2ec9aa130x130.jpg</image>
+        </item>
+        <item>
+            <id>39200501052</id>
+            <shop_name>Morele.net S.J.</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/392.gif?1356004637</shop_logo>
+            <shop_id>392</shop_id>
+            <shop_url>http://www.morele.net</shop_url>
+            <nokaut_shop_url>sklep-morele-net/</nokaut_shop_url>
+            <price>3837,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>1</availability>
+            <description></description>
+            <image>http://nokautimg2.pl/p/ea/2e/ea2eb01b84294f5b18b20e692f889820130x130.jpg</image>
+        </item>
+        <item>
+            <id>426100001041</id>
+            <shop_name>Matrixmedia.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/4261.jpg?1370946756</shop_logo>
+            <shop_id>4261</shop_id>
+            <shop_url>http://www.matrixmedia.pl</shop_url>
+            <nokaut_shop_url>matrixmedia-pl/</nokaut_shop_url>
+            <price>3699,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>1</availability>
+            <description>Aparat hybrydowy SONY NEX-7 to zaawansowane technologicznie i bardzo nowatorskie podejście do tematu fotografii.</description>
+            <image>http://nokautimg4.pl/p/38/8b/388b1bc447aa501f91a154adb87a9d4e130x130.jpg</image>
+        </item>
+        <item>
+            <id>63200501944</id>
+            <shop_name>RTV EURO AGD</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/632.gif?1356004782</shop_logo>
+            <shop_id>632</shop_id>
+            <shop_url>http://www.euro.com.pl</shop_url>
+            <nokaut_shop_url>euro-com-pl/</nokaut_shop_url>
+            <price>3990,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>4</availability>
+            <description></description>
+            <image>http://nokautimg2.pl/p/57/30/5730724d18d17723c95e6379ced9a64b130x130.jpg</image>
+        </item>
+        <item>
+            <id>63201000493</id>
+            <shop_name>RTV EURO AGD</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/632.gif?1356004782</shop_logo>
+            <shop_id>632</shop_id>
+            <shop_url>http://www.euro.com.pl</shop_url>
+            <nokaut_shop_url>euro-com-pl/</nokaut_shop_url>
+            <price>4169,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability></availability>
+            <description></description>
+            <image>http://nokautimg2.pl/p/1b/05/1b05483a2c610a5035f5bfa0d92ca742130x130.jpg</image>
+        </item>
+        <item>
+            <id>871900001177</id>
+            <shop_name>faxtel sklep internetowy</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/8719.jpg?1358328908</shop_logo>
+            <shop_id>8719</shop_id>
+            <shop_url>http://www.faxtel.com.pl</shop_url>
+            <nokaut_shop_url>faxtel-com-pl/</nokaut_shop_url>
+            <price>4199,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability></availability>
+            <description>Kompaktowy aparat α NEX-7 z wymiennymi obiektywami firmy Sony wykonuje wysokiej jakości zdjęcia o rozdzielczości 24,3 megapikseli oraz nagrywa filmy Full HD. Korzystaj z precyzyjnej, czułej funkcji autofokus i wysokiej szybkości wykonywanych zdjęć. Ciesz się prostotą obsługi i zaawansowanymi kreatywnymi ustawieniami.</description>
+            <image>http://nokautimg2.pl/p/14/e3/14e3cbb771bc4f1486f6816d0f7b477b130x130.jpg</image>
+        </item>
+        <item>
+            <id>871900000591</id>
+            <shop_name>faxtel sklep internetowy</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/8719.jpg?1358328908</shop_logo>
+            <shop_id>8719</shop_id>
+            <shop_url>http://www.faxtel.com.pl</shop_url>
+            <nokaut_shop_url>faxtel-com-pl/</nokaut_shop_url>
+            <price>3998,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability></availability>
+            <description>Kompaktowy aparat α NEX-7 z wymiennymi obiektywami firmy Sony wykonuje wysokiej jakości zdjęcia o rozdzielczości 24,3 megapikseli oraz nagrywa filmy Full HD. Korzystaj z precyzyjnej, czułej funkcji autofokus i wysokiej szybkości wykonywanych zdjęć. Ciesz się prostotą obsługi i zaawansowanymi kreatywnymi ustawieniami.</description>
+            <image>http://nokautimg2.pl/p/14/89/14894c4f3c50c6370b70716034a7c04b130x130.jpg</image>
+        </item>
+        <item>
+            <id>1881600009010</id>
+            <shop_name>MediaMarkt.pl</shop_name>
+            <shop_logo>http://img1.nokautstatic.pl/s/18816.jpg?1356017082</shop_logo>
+            <shop_id>18816</shop_id>
+            <shop_url>http://www.mediamarkt.pl/</shop_url>
+            <nokaut_shop_url>mediamarkt-pl/</nokaut_shop_url>
+            <price>4029,00</price>
+            <product_id>2544280653426655360</product_id>
+            <availability>0</availability>
+            <description>Aparat hybrydowy SONY NEX-7K</description>
+            <image>http://nokautimg3.pl/p/67/f2/67f255a821695a6bcaf4c4301c0be095130x130.jpg</image>
+        </item>
+    </items>
+</success>
+"""
+
+GET_PRODUCT_NOKAUT_RESPONSE = """<?xml version="1.0" encoding="UTF-8"?>
+<success>
+    <items>
+        <item>
+            <id>2544280653426655360</id>
+            <name>Sony NEX-7</name>
+            <shop_count>15</shop_count>
+            <offer_count>29</offer_count>
+            <price_min>3699,00</price_min>
+            <price_max>5590,00</price_max>
+            <price_avg>4409,35</price_avg>
+            <url>http://www.nokaut.pl/aparaty-cyfrowe/sony-nex-7.html</url>
+            <image_mini>http://nokautimg3.pl/p-b8-d3-b8d362b87922356cacc456f1d2335e1090x90/sony-nex-7.jpg</image_mini>
+            <image_medium>http://nokautimg3.pl/p-b8-d3-b8d362b87922356cacc456f1d2335e10130x130/sony-nex-7.jpg</image_medium>
+            <image_large>http://nokautimg3.pl/p-b8-d3-b8d362b87922356cacc456f1d2335e10500x500/sony-nex-7.jpg</image_large>
+            <opinions>
+                <opinion_0>
+                    <title>Lekki, mały, dobre zdjęcia, polecam...</title>
+                    <content>Lekki, mały, dobre zdjęcia, polecam tym którym nie chce się nosić lustra a zwykłe automaty to dla nich zbyt mało.</content>
+                    <author></author>
+                    <time_added>2013-02-18 14:50:04</time_added>
+                    <rating_1>4</rating_1>
+                    <rating_2>4</rating_2>
+                    <rating_3>4</rating_3>
+                </opinion_0>
+                <opinion_1>
+                    <title>Super maszyna!...</title>
+                    <content>Super maszyna!</content>
+                    <author></author>
+                    <time_added>2013-02-02 11:50:49</time_added>
+                    <rating_1>5</rating_1>
+                    <rating_2>5</rating_2>
+                    <rating_3>5</rating_3>
+                </opinion_1>
+            </opinions>
+            <main_category>
+                <id>5796</id>
+                <title>Aparaty cyfrowe</title>
+                <path_to_category>|Fotografia i optyka|Aparaty fotograficzne|Aparaty cyfrowe|</path_to_category>
+                <path_to_category_by_id>0|86|110|5796</path_to_category_by_id>
+            </main_category>
+            <rate>5</rate>
+            <thumbnail>http://nokautimg3.pl/p-b8-d3-b8d362b87922356cacc456f1d2335e1090x90/sony-nex-7.jpg</thumbnail>
+            <image>http://nokautimg3.pl/p-b8-d3-b8d362b87922356cacc456f1d2335e10130x130/sony-nex-7.jpg</image>
+        </item>
+    </items>
+</success>
+"""
+
+GET_EMPTY_NOKAUT_RESPONSE = """<?xml version="1.0" encoding="UTF-8"?>
+<success>
+    <items></items>
+</success>
+"""

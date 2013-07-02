@@ -5,7 +5,7 @@ from decimal import Decimal
 import sys
 import os
 sys.path.insert(0, 'libs')
-sys.path.insert(0, os.path.join('pythonpath','libs'))
+sys.path.insert(0, os.path.join('pythonpath', 'libs'))
 import mechanize
 from bs4 import BeautifulSoup
 

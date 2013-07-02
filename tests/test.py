@@ -1,6 +1,5 @@
 import unittest
 from mock import patch
-from mock import Mock
 import sys
 from decimal import Decimal
 from StringIO import StringIO
@@ -11,6 +10,7 @@ from pythonpath import nokaut
 from pythonpath import settings
 
 import static
+
 
 class TestNokaut(unittest.TestCase):
     """testing nokaut module"""
@@ -88,6 +88,48 @@ class TestNokaut(unittest.TestCase):
         self.assertNotEqual(err, 0)
 
 
+def mock_urlopen_function(url):
+    if (not isinstance(url, str)):
+        url = url.get_full_url()
+    url = str(url)
+    if ('allegro.pl' in url and not 'string=&' in url):
+        if('description=1' in url
+           and 'order=p' in url
+           and 'standard_allegro=1' in url
+           and 'offerTypeBuyNow=1' in url
+          ):
+            return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7_WITH_ORDER, url)
+        return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7, url)
+    elif('api.nokaut.pl' in url):
+        if('name=&' in url and
+            'method=nokaut.Price.getByProductName' in url and
+            'key=' in url and
+            'format=xml' in url
+           ):
+            return MockUrlOpen(static.GET_EMPTY_NOKAUT_RESPONSE,url)
+        elif ('name=' in url and
+            'method=nokaut.Price.getByProductName' in url and
+            'key=' in url and
+            'format=xml' in url
+           ):
+            return MockUrlOpen(static.GET_PRICE_NOKAUT_RESPONSE, url)
+        elif ('id=&' in url and
+            'method=nokaut.Product.getById' in url and
+            'key=' in url and
+            'format=xml' in url
+           ):
+            return MockUrlOpen(static.GET_EMPTY_NOKAUT_RESPONSE,url)
+        elif ('id=' in url and
+            'method=nokaut.Product.getById' in url and
+            'key=' in url and
+            'format=xml' in url
+           ):
+            return MockUrlOpen(static.GET_PRODUCT_NOKAUT_RESPONSE, url)
+        else:
+            MockUrlOpen('', url)
+    return MockUrlOpen('', url)
+
+
 class TestNokautClass(unittest.TestCase):
     """testing nokaut class"""
 
@@ -104,6 +146,20 @@ class TestNokautClass(unittest.TestCase):
         self.assertIsInstance(url, str)
         self.assertNotEqual(url, '')
 
+    @patch('urllib2.urlopen', mock_urlopen_function)
+    def test_search_offline(self):
+        """testing nokaut class offer search"""
+
+        nokaut_search = Nokaut('Aparat Sony nex-7', settings.NOKAUT_KEY)
+        nokaut_search.search()
+        price = nokaut_search.get_lowest_price()
+        url = nokaut_search.get_offer_url()
+
+        self.assertIsInstance(price, Decimal)
+        self.assertEqual(price, Decimal(3699.00))
+        self.assertIsInstance(url, str)
+        self.assertEqual(url, 'http://www.nokaut.pl/aparaty-cyfrowe/sony-nex-7.html')
+
     def test_empty_search(self):
         """testing nokaut class offer empty string search"""
 
@@ -116,20 +172,19 @@ class TestNokautClass(unittest.TestCase):
         self.assertTrue(price >= Decimal(0.0))
         self.assertIsInstance(url, str)
 
+    @patch('urllib2.urlopen', mock_urlopen_function)
+    def test_empty_search_offline(self):
+        """testing nokaut class offer empty string search"""
 
-def mock_urlopen_function(url):
-    if (not isinstance(url,str)):
-        url = url.get_full_url()
-    url = str(url)
-    if ('allegro.pl' in url and not 'string=&' in url):
-        if('description=1' in url
-           and 'order=p' in url
-           and 'standard_allegro=1' in url
-           and 'offerTypeBuyNow=1' in url
-        ):
-            return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7_WITH_ORDER, url)
-        return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7, url)
-    return MockUrlOpen('', url)
+        nokaut = Nokaut('', settings.NOKAUT_KEY)
+        nokaut.search()
+        price = nokaut.get_lowest_price()
+        url = nokaut.get_offer_url()
+
+        self.assertIsInstance(price, Decimal)
+        self.assertEqual(price, Decimal(0.0))
+        self.assertIsInstance(url, str)
+        self.assertEqual(url, '')
 
 
 class TestAllegroClass(unittest.TestCase):
@@ -172,8 +227,9 @@ class TestAllegroClass(unittest.TestCase):
         self.assertIsInstance(price, Decimal)
         self.assertTrue(price == Decimal(4275.00))
         self.assertIsInstance(url, str)
-        self.assertEqual(url,
-            'http://www.allegro.pl/aparat-sony-nex-7-18-55mm-16gb-'+
+        self.assertEqual(
+            url,
+            'http://www.allegro.pl/aparat-sony-nex-7-18-55mm-16gb-' + 
             'etui-nowosc-wa-ss-i3358538364.html'
         )
 
@@ -190,6 +246,7 @@ class TestAllegroClass(unittest.TestCase):
         self.assertTrue(price == Decimal(0.0))
         self.assertIsInstance(url, str)
         self.assertEqual(url, '')
+
 
 class MockUrlOpen(StringIO):
 

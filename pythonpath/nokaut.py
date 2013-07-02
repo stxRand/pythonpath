@@ -98,7 +98,7 @@ class Nokaut(OfferProvider):
 
         logging.debug(products)
         if (len(products) == 0):
-            return (None, None, None)
+            return ('', Decimal(0.0), '')
         (product_id, price_and_url) = products.popitem()
         return (product_id, price_and_url[0], price_and_url[1])
 
@@ -110,9 +110,10 @@ class Nokaut(OfferProvider):
         logging.debug(url)
         return url
 
+
 class ArgumentParserHelpError(argparse.ArgumentParser):
     def print_help(self, file=None):
-        super(ArgumentParserHelpError,self).print_help(file)
+        super(ArgumentParserHelpError, self).print_help(file)
         sys.exit(1)
 
 
@@ -121,9 +122,9 @@ def main():
         description='Get the best offer from Nokaut.'
     )
     parser.add_argument('-p', '--product', type=str,
-                       help='name of a product to search', required=True)
+                        help='name of a product to search', required=True)
     parser.add_argument('-k', '--key', type=str,
-                       help='nokaut partnership key', required=True)
+                        help='nokaut partnership key', required=True)
     args = parser.parse_args()
 
     try:

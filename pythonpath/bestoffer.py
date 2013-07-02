@@ -1,4 +1,3 @@
-import os
 import urllib
 import datetime
 
@@ -13,13 +12,14 @@ from nokaut import Nokaut
 from model import Search
 from model import SearchCache
 
+
 class BaseHandler(webapp2.RequestHandler):
 
     @webapp2.cached_property
     def jinja2(self):
         # Returns a Jinja2 renderer cached in the app registry.
         jinja = jinja2.get_jinja2(app=self.app)
-        jinja.environment.filters.update(dict(urlencode = urllib.quote))
+        jinja.environment.filters.update(dict(urlencode=urllib.quote))
         return jinja
 
     def render_response(self, _template, **context):
@@ -37,6 +37,7 @@ class BaseHandler(webapp2.RequestHandler):
             url = users.create_login_url(uri)
             url_linktext = 'Login'
         return (url, url_linktext)
+
 
 def encode_url(tag, text):
     return urllib.urlencode({tag: text})

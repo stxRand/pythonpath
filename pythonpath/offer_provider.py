@@ -19,7 +19,7 @@ class OfferProvider(object):
 
         """
 
-        return (Deciaml(0.0), '')
+        return (Decimal(0.0), '')
 
     @abc.abstractproperty
     def get_lowest_price(self):
