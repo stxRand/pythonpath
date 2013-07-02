@@ -1,12 +1,16 @@
 import unittest
 from mock import patch
+from mock import Mock
 import sys
 from decimal import Decimal
+from StringIO import StringIO
+
 from pythonpath.allegro import Allegro
 from pythonpath.nokaut import Nokaut
 from pythonpath import nokaut
 from pythonpath import settings
 
+import static
 
 class TestNokaut(unittest.TestCase):
     """testing nokaut module"""
@@ -113,6 +117,21 @@ class TestNokautClass(unittest.TestCase):
         self.assertIsInstance(url, str)
 
 
+def mock_urlopen_function(url):
+    if (not isinstance(url,str)):
+        url = url.get_full_url()
+    url = str(url)
+    if ('allegro.pl' in url and not 'string=&' in url):
+        if('description=1' in url
+           and 'order=p' in url
+           and 'standard_allegro=1' in url
+           and 'offerTypeBuyNow=1' in url
+        ):
+            return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7_WITH_ORDER, url)
+        return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7, url)
+    return MockUrlOpen('', url)
+
+
 class TestAllegroClass(unittest.TestCase):
     """testing allegro class"""
 
@@ -140,6 +159,52 @@ class TestAllegroClass(unittest.TestCase):
         self.assertIsInstance(price, Decimal)
         self.assertTrue(price >= Decimal(0.0))
         self.assertIsInstance(url, str)
+
+    @patch('mechanize.urlopen', mock_urlopen_function)
+    def test_search_offline(self):
+        """testing allegro class offer search offilne"""
+
+        allegro = Allegro('"Aparat Sony nex-7"')
+        allegro.search()
+        price = allegro.get_lowest_price()
+        url = allegro.get_offer_url()
+
+        self.assertIsInstance(price, Decimal)
+        self.assertTrue(price == Decimal(4275.00))
+        self.assertIsInstance(url, str)
+        self.assertEqual(url,
+            'http://www.allegro.pl/aparat-sony-nex-7-18-55mm-16gb-'+
+            'etui-nowosc-wa-ss-i3358538364.html'
+        )
+
+    @patch('mechanize.urlopen', mock_urlopen_function)
+    def test_empty_search_offline(self):
+        """testing allegro class offer empty string search"""
+
+        allegro = Allegro('')
+        allegro.search()
+        price = allegro.get_lowest_price()
+        url = allegro.get_offer_url()
+
+        self.assertIsInstance(price, Decimal)
+        self.assertTrue(price == Decimal(0.0))
+        self.assertIsInstance(url, str)
+        self.assertEqual(url, '')
+
+class MockUrlOpen(StringIO):
+
+    def __init__(self, buffer_=None, url=''):
+        StringIO.__init__(self, buffer_)
+        self.url = url
+
+    def geturl(self):
+        return self.url
+
+    def info(self):
+        return ''
+
+    def getcode(self):
+        return ''
 
 
 if __name__ == '__main__':
