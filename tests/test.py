@@ -133,6 +133,7 @@ def mock_urlopen_function(url):
 class TestNokautClass(unittest.TestCase):
     """testing nokaut class"""
 
+    @unittest.skip("online test - requires internet connection")
     def test_search(self):
         """testing nokaut class offer search"""
 
@@ -160,6 +161,7 @@ class TestNokautClass(unittest.TestCase):
         self.assertIsInstance(url, str)
         self.assertEqual(url, 'http://www.nokaut.pl/aparaty-cyfrowe/sony-nex-7.html')
 
+    @unittest.skip("online test - requires internet connection")
     def test_empty_search(self):
         """testing nokaut class offer empty string search"""
 
@@ -190,6 +192,7 @@ class TestNokautClass(unittest.TestCase):
 class TestAllegroClass(unittest.TestCase):
     """testing allegro class"""
 
+    @unittest.skip("online test - requires internet connection")
     def test_search(self):
         """testing allegro class offer search"""
 
@@ -203,6 +206,7 @@ class TestAllegroClass(unittest.TestCase):
         self.assertIsInstance(url, str)
         self.assertNotEqual(url, '')
 
+    @unittest.skip("online test - requires internet connection")
     def test_empty_search(self):
         """testing allegro class offer empty string search"""
 
@@ -229,7 +233,7 @@ class TestAllegroClass(unittest.TestCase):
         self.assertIsInstance(url, str)
         self.assertEqual(
             url,
-            'http://www.allegro.pl/aparat-sony-nex-7-18-55mm-16gb-' + 
+            'http://www.allegro.pl/aparat-sony-nex-7-18-55mm-16gb-' +
             'etui-nowosc-wa-ss-i3358538364.html'
         )
 

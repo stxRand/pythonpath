@@ -9,7 +9,9 @@ setup(
     author_email="marcin.kowiel@stxnext.pl",
     description="Python Path Project",
     test_suite="tests",
-    install_requires=['lxml==2.3', 'mechanize', 'BeautifulSoup', 'mock'],
+    install_requires=['lxml==2.3', 'mechanize', 'BeautifulSoup', 'mock',
+                      'nosegae','webtest'
+                     ],
     entry_points={
         'console_scripts': [
             'nokaut = pythonpath.nokaut:main'

@@ -1,5 +1,6 @@
 import urllib
 import datetime
+import os
 
 from google.appengine.api import users
 
@@ -220,8 +221,15 @@ class Storage(BaseHandler):
 
         self.render_response('storage.html', **template_values)
 
+config = {}
+config['webapp2_extras.jinja2'] = {
+    'template_path': os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'templates'
+        ),
+    }
 application = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/compare', Compare),
     ('/storage', Storage)
-], debug=True)
+], debug=True, config=config)
