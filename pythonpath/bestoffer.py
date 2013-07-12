@@ -58,51 +58,11 @@ class MainPage(BaseHandler):
         user_nick = self.__get_user_nickname()
 
         last_searches = self.__get_user_last_searches(5)
-        self.__add_search(product_name)
-
-        cache_query = SearchCache.query(SearchCache.product_name == product_name)
-        if (cache_query.count() > 0):
-            cache = cache_query.fetch(1).pop()
-            time_limit = datetime.datetime.now()-cache.insert_date
-            if (time_limit.days > settings.DATABASE_EXPIRE_NUMBER_OF_DAYS):
-                # update
-                (allegro_price, allegro_url) = \
-                    self.__get_price_and_url_from_allegro(product_name)
-                (nokaut_price, nokaut_url) = \
-                    self.__get_price_and_url_from_nokaut(product_name)
-                self.__update_search_cache(cache,
-                                           product_name,
-                                           allegro_price,
-                                           allegro_url,
-                                           nokaut_price,
-                                           nokaut_url)
-            else:
-                # use previous results
-                allegro_price = cache.allegro_price
-                allegro_url = cache.allegro_url
-                nokaut_price = cache.nokaut_price
-                nokaut_url = cache.nokaut_url
-                self.__increment_search_count(cache)
-        else:
-            # add
-            (allegro_price, allegro_url) = \
-                self.__get_price_and_url_from_allegro(product_name)
-            (nokaut_price, nokaut_url) = \
-                self.__get_price_and_url_from_nokaut(product_name)
-            self.__add_search_cache(product_name,
-                                    allegro_price,
-                                    allegro_url,
-                                    nokaut_price,
-                                    nokaut_url)
-
         last_searches_url = [encode_url('product', _search)
-                             for _search in last_searches]
+                     for _search in last_searches]
+
         template_values = {
             'product_name': product_name,
-            'nokaut_price': nokaut_price,
-            'nokaut_url': nokaut_url,
-            'allegro_price': allegro_price,
-            'allegro_url': allegro_url,
             'url': url,
             'url_linktext': url_linktext,
             'nick': user_nick,
@@ -110,6 +70,50 @@ class MainPage(BaseHandler):
             'last_searches_url': last_searches_url,
             'most_popular_search': most_popular_search
         }
+
+        if (product_name != ''):
+            self.__add_search(product_name)
+
+            cache_query = SearchCache.query(SearchCache.product_name == product_name)
+            if (cache_query.count() > 0):
+                cache = cache_query.fetch(1).pop()
+                time_limit = datetime.datetime.now()-cache.insert_date
+                if (time_limit.days > settings.DATABASE_EXPIRE_NUMBER_OF_DAYS):
+                    # update
+                    (allegro_price, allegro_url) = \
+                        self.__get_price_and_url_from_allegro(product_name)
+                    (nokaut_price, nokaut_url) = \
+                        self.__get_price_and_url_from_nokaut(product_name)
+                    self.__update_search_cache(cache,
+                                               product_name,
+                                               allegro_price,
+                                               allegro_url,
+                                               nokaut_price,
+                                               nokaut_url)
+                else:
+                    # use previous results
+                    allegro_price = cache.allegro_price
+                    allegro_url = cache.allegro_url
+                    nokaut_price = cache.nokaut_price
+                    nokaut_url = cache.nokaut_url
+                    self.__increment_search_count(cache)
+            else:
+                # add
+                (allegro_price, allegro_url) = \
+                    self.__get_price_and_url_from_allegro(product_name)
+                (nokaut_price, nokaut_url) = \
+                    self.__get_price_and_url_from_nokaut(product_name)
+                self.__add_search_cache(product_name,
+                                        allegro_price,
+                                        allegro_url,
+                                        nokaut_price,
+                                        nokaut_url)
+                template_values.update({
+                    'nokaut_price': nokaut_price,
+                    'nokaut_url': nokaut_url,
+                    'allegro_price': allegro_price,
+                    'allegro_url': allegro_url
+                    })
 
         self.render_response('index.html', **template_values)
 
