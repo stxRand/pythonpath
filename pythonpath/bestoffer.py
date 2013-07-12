@@ -59,7 +59,7 @@ class MainPage(BaseHandler):
 
         last_searches = self.__get_user_last_searches(5)
         last_searches_url = [encode_url('product', _search)
-                     for _search in last_searches]
+                             for _search in last_searches]
 
         template_values = {
             'product_name': product_name,
@@ -70,7 +70,11 @@ class MainPage(BaseHandler):
             'last_searches_url': last_searches_url,
             'most_popular_search': most_popular_search
         }
+        template_values.update(self.__process_search(product_name))
 
+        self.render_response('index.html', **template_values)
+
+    def __process_search(self, product_name):
         if (product_name != ''):
             self.__add_search(product_name)
 
@@ -108,14 +112,14 @@ class MainPage(BaseHandler):
                                         allegro_url,
                                         nokaut_price,
                                         nokaut_url)
-                template_values.update({
-                    'nokaut_price': nokaut_price,
-                    'nokaut_url': nokaut_url,
-                    'allegro_price': allegro_price,
-                    'allegro_url': allegro_url
-                    })
-
-        self.render_response('index.html', **template_values)
+            return {
+                'nokaut_price': nokaut_price,
+                'nokaut_url': nokaut_url,
+                'allegro_price': allegro_price,
+                'allegro_url': allegro_url
+            }
+        else:
+            return {}
 
     def __get_most_popular_search(self, size):
         most_popular_query = SearchCache.query().order(-SearchCache.search_count)
