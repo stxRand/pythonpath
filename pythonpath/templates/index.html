@@ -6,16 +6,37 @@
 {% autoescape true %}
 <html>
   <body>
-    <a href="{{ url|safe }}">{{ url_linktext }}</a>
+    Hello {{ nick }}! <a href="{{ url|safe }}">{{ url_linktext }}</a>
 
     <hr>
 
+    {% if product_name != '' %}
+      <p>You look for: {{ product_name }}</p>
+      <p>The best offer from nokaut.pl:</br>
+          {{ nokaut_price }} PLN <a href="{{ nokaut_url }}"> {{ nokaut_url }} </a>
+      </p>
+      <p>The best offer from allegro.pl:</br>
+          {{ allegro_price }} PLN <a href="{{ allegro_url }}"> {{ allegro_url }} </a>
+      </p>
+
+      <hr>
+    {% endif %}
+
     <p>Product to comapre:<p>
 
-    <form action="/compare" method="get">
-      <div><input type='text' name="product" size="30" value=" {{ product }} "></div>
+    <form action="/" method="get">
+      <div><input type='text' name="product" size="30" value="{{ product_name }}"></div>
       <div><input type="submit" value="Find offers"></div>
     </form>
+
+    <hr>
+
+    <p>
+    Your last searches: </br>
+    {% for search in last_searches %}
+      <a href="/?product={{ search.product_name.lstrip().rstrip()|urlencode }}"> {{ search.product_name }} </a> </br>
+    {% endfor %}
+    </p>
 
     <hr>
     <p>Most popular searches:</p>

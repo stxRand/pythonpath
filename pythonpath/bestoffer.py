@@ -48,26 +48,8 @@ class MainPage(BaseHandler):
 
     def get(self):
 
-        (url, url_linktext) = self.get_login_url_and_text(self.request.uri)
         most_popular_search = self.__get_most_popular_search(5)
 
-        template_values = {
-            'product': '',
-            'most_popular_search': most_popular_search,
-            'url': url,
-            'url_linktext': url_linktext,
-        }
-
-        self.render_response('index.html', **template_values)
-
-    def __get_most_popular_search(self, size):
-        most_popular_query = SearchCache.query().order(-SearchCache.search_count)
-        return most_popular_query.fetch(size)
-
-
-class Compare(BaseHandler):
-
-    def get(self):
         product_name = self.request.get('product', '')
         product_name = product_name.rstrip().lstrip()
 
@@ -125,10 +107,15 @@ class Compare(BaseHandler):
             'url_linktext': url_linktext,
             'nick': user_nick,
             'last_searches': last_searches,
-            'last_searches_url': last_searches_url
+            'last_searches_url': last_searches_url,
+            'most_popular_search': most_popular_search
         }
 
-        self.render_response('search.html', **template_values)
+        self.render_response('index.html', **template_values)
+
+    def __get_most_popular_search(self, size):
+        most_popular_query = SearchCache.query().order(-SearchCache.search_count)
+        return most_popular_query.fetch(size)
 
     def __get_user_id(self):
         user = users.get_current_user()
@@ -226,10 +213,9 @@ config['webapp2_extras.jinja2'] = {
     'template_path': os.path.join(
         os.path.abspath(os.path.dirname(__file__)),
         'templates'
-        ),
-    }
+    ),
+}
 application = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/compare', Compare),
     ('/storage', Storage)
 ], debug=True, config=config)
