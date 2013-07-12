@@ -1,4 +1,3 @@
-import sys
 import unittest
 import webtest
 from google.appengine.ext import testbed
@@ -27,4 +26,5 @@ class TestApp(unittest.TestCase):
         self.assertIn('Product to comapre', response.normal_body)
 
 
-
+if __name__ == '__main__':
+    unittest.main()
