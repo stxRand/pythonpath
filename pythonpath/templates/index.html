@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <head>
   <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+  <script>
+    $('#btn_Find_Offer').click(function () { 
+      $.ajax({
+        type: 'GET',
+        url: "/compare",
+        data:'product='+product,
+        cache: false,
+        success: function(any_data){
+          $("success").html(any_data);
+        }
+      }); 
+    }
+  </script>  
 </head>
 
 {% autoescape true %}
@@ -26,7 +39,7 @@
 
     <form action="/" method="get">
       <div><input type='text' name="product" size="30" value="{{ product_name }}"></div>
-      <div><input type="submit" value="Find offers"></div>
+      <div><input type="submit" id="btn_Find_Offer" value="Find offers"></div>
     </form>
 
     <hr>
