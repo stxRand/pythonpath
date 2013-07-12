@@ -6,12 +6,22 @@ from google.appengine.api import users
 
 import webapp2
 from webapp2_extras import jinja2
+import json
+import decimal
 
 import settings
 from allegro import Allegro
 from nokaut import Nokaut
 from model import Search
 from model import SearchCache
+
+
+# from https://github.com/simplejson/simplejson/issues/34
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return str(o)
+        return super(DecimalEncoder, self).default(o)
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -74,7 +84,16 @@ class MainPage(BaseHandler):
 
         self.render_response('index.html', **template_values)
 
+    def post(self):
+        input = json.loads(self.request.body)
+        product_name = input.pop('product', '')
+        result = self.__process_search(product_name)
+
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(result, cls=DecimalEncoder))
+
     def __process_search(self, product_name):
+        product_name = product_name.rstrip().lstrip()
         if (product_name != ''):
             self.__add_search(product_name)
 
