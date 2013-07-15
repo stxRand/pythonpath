@@ -82,30 +82,26 @@ class MainHandler(BaseHandler):
                         self.__get_price_and_url_from_allegro(product_name)
                     (nokaut_price, nokaut_url) = \
                         self.__get_price_and_url_from_nokaut(product_name)
-                    self.__update_search_cache(cache,
-                                               product_name,
-                                               allegro_price,
-                                               allegro_url,
-                                               nokaut_price,
-                                               nokaut_url)
+                    cache.update(product_name, allegro_price, allegro_url,
+                                 nokaut_price, nokaut_url)
                 else:
                     # use previous results
                     allegro_price = cache.allegro_price
                     allegro_url = cache.allegro_url
                     nokaut_price = cache.nokaut_price
                     nokaut_url = cache.nokaut_url
-                    self.__increment_search_count(cache)
+                    cache.increment_search_count()
             else:
                 # add
                 (allegro_price, allegro_url) = \
                     self.__get_price_and_url_from_allegro(product_name)
                 (nokaut_price, nokaut_url) = \
                     self.__get_price_and_url_from_nokaut(product_name)
-                self.__add_search_cache(product_name,
-                                        allegro_price,
-                                        allegro_url,
-                                        nokaut_price,
-                                        nokaut_url)
+                SearchCache.add(product_name,
+                                allegro_price,
+                                allegro_url,
+                                nokaut_price,
+                                nokaut_url)
             return {
                 'nokaut_price': nokaut_price,
                 'nokaut_url': nokaut_url,
@@ -148,41 +144,6 @@ class MainHandler(BaseHandler):
         if user:
             search.author = user
         search.put()
-
-    def __add_search_cache(self,
-                           product_name,
-                           allegro_price,
-                           allegro_url,
-                           nokaut_price,
-                           nokaut_url):
-        cache = SearchCache(product_name=product_name,
-                            allegro_price=allegro_price,
-                            allegro_url=allegro_url,
-                            nokaut_price=nokaut_price,
-                            nokaut_url=nokaut_url,
-                            search_count=1)
-        cache.put()
-
-    def __update_search_cache(self,
-                              search_cache,
-                              product_name,
-                              allegro_price,
-                              allegro_url,
-                              nokaut_price,
-                              nokaut_url):
-        search_cache.product_name = product_name
-        search_cache.allegro_price = allegro_price
-        search_cache.allegro_url = allegro_url
-        search_cache.nokaut_price = nokaut_price
-        search_cache.nokaut_url = nokaut_url
-        search_cache.search_count = search_cache.search_count+1
-        search_cache.put()
-
-    def __increment_search_count(self, search_cache):
-        if (search_cache.search_count is None):
-            search_cache.search_count = 1
-        search_cache.search_count = search_cache.search_count+1
-        search_cache.put()
 
     def __get_price_and_url_from_allegro(self, product_name):
         allegro = Allegro('"%s"' % product_name)

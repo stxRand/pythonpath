@@ -25,8 +25,8 @@ class Search(ndb.Model):
     product_name = ndb.StringProperty()
     date = ndb.DateTimeProperty(auto_now_add=True)
 
-    @staticmethod
-    def default_parent_key(author=None):
+    @classmethod
+    def default_parent_key(cls, author=None):
         """Constructs a default Datastore key for a Search Class."""
 
         if (author is None):
@@ -44,3 +44,39 @@ class SearchCache(ndb.Model):
     nokaut_price = DecimalProperty()
     nokaut_url = ndb.StringProperty()
     search_count = ndb.IntegerProperty()
+
+    @classmethod
+    def add(cls,
+            product_name,
+            allegro_price,
+            allegro_url,
+            nokaut_price,
+            nokaut_url):
+        cache = SearchCache(product_name=product_name,
+                            allegro_price=allegro_price,
+                            allegro_url=allegro_url,
+                            nokaut_price=nokaut_price,
+                            nokaut_url=nokaut_url,
+                            search_count=1)
+        cache.put()
+        return cache
+
+    def update(self,
+               product_name,
+               allegro_price,
+               allegro_url,
+               nokaut_price,
+               nokaut_url):
+        self.product_name = product_name
+        self.allegro_price = allegro_price
+        self.allegro_url = allegro_url
+        self.nokaut_price = nokaut_price
+        self.nokaut_url = nokaut_url
+        self.search_count = self.search_count+1
+        self.put()
+
+    def increment_search_count(self):
+        if (self.search_count is None):
+            self.search_count = 1
+        self.search_count = self.search_count+1
+        self.put()
