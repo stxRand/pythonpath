@@ -1,20 +1,9 @@
 <!DOCTYPE html>
 <head>
   <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
-  <script>
-    $('#btn_Find_Offer').click(function () { 
-      $.ajax({
-        type: 'GET',
-        url: "/compare",
-        data:'product='+product,
-        cache: false,
-        success: function(any_data){
-          $("success").html(any_data);
-        }
-      }); 
-    }
-  </script>  
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 </head>
+
 
 {% autoescape true %}
 <html>
@@ -22,6 +11,9 @@
     Hello {{ nick }}! <a href="{{ url|safe }}">{{ url_linktext }}</a>
 
     <hr>
+
+    <div id="show_products">
+    </div>
 
     {% if product_name != '' %}
       <p>You look for: {{ product_name }}</p>
@@ -37,10 +29,16 @@
 
     <p>Product to comapre:<p>
 
-    <form action="/" method="get">
-      <div><input type='text' name="product" size="30" value="{{ product_name }}"></div>
-      <div><input type="submit" id="btn_Find_Offer" value="Find offers"></div>
+    <form action="/" method="post" id="formFindOffer">
+      <div><input type="text" name="product" size="30" value="{{ product_name }}"></div>
+      <div><input type="submit" id="btnFindOffer" value="Find offers"></div>
     </form>
+    
+    <script language="javascript" type="text/javascript">
+      
+      $("#show_products").append('<p>Products:</p>');
+    
+    </script>
 
     <hr>
 

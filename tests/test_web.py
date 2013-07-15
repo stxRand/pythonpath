@@ -37,8 +37,7 @@ class TestApp(unittest.TestCase):
         mock_nokaut.return_value = (Decimal(200.0), 'www.nokaut.pl')
 
         param = {'product': 'anything'}
-        response = self.testapp.post('/',
-            json.dumps(param, cls=DecimalEncoder))
+        response = self.testapp.post('/', param)
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.headers['Content-type'], 'application/json')
         response_body = json.loads(response.body)

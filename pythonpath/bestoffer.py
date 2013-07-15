@@ -85,8 +85,22 @@ class MainPage(BaseHandler):
         self.render_response('index.html', **template_values)
 
     def post(self):
-        input = json.loads(self.request.body)
-        product_name = input.pop('product', '')
+        """
+        Process search query. Return the result from search cache or
+        send query to nokaut or allego.
+
+        :param product: (str) The name of product to search for.
+
+        :returns: (json dict)
+            {
+                'nokaut_price': nokaut_price,
+                'nokaut_url': nokaut_url,
+                'allegro_price': allegro_price,
+                'allegro_url': allegro_url
+            }
+        """
+
+        product_name = self.request.get('product', '')
         result = self.__process_search(product_name)
 
         self.response.headers['Content-Type'] = 'application/json'
