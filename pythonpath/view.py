@@ -16,17 +16,17 @@ from basehandler import DecimalEncoder
 class MainHandler(BaseHandler):
 
     def get(self):
-
-        most_popular_search = self.__get_most_popular_search(5)
-
         product_name = self.request.get('product', '')
         product_name = product_name.rstrip().lstrip()
 
         (url, url_linktext) = self.get_login_url_and_text(self.request.uri)
 
-        user_nick = self.__get_user_nickname()
+        user_nick = self.get_user_nickname()
 
-        last_searches = self.__get_user_last_searches(5)
+        most_popular_search = SearchCache.get_most_popular_search(5)
+
+        user_id = self.get_user_id()
+        last_searches = Search.get_user_last_searches(user_id, 5)
         last_searches_url = [encode_url('product', _search)
                              for _search in last_searches]
 
@@ -70,7 +70,10 @@ class MainHandler(BaseHandler):
     def __process_search(self, product_name):
         product_name = product_name.rstrip().lstrip()
         if (product_name != ''):
-            self.__add_search(product_name)
+            allegro = Allegro()
+            nokaut = Nokaut(nokaut_key=settings.NOKAUT_KEY)
+
+            Search.add(product_name, users.get_current_user())
 
             cache_query = SearchCache.query(SearchCache.product_name == product_name)
             if (cache_query.count() > 0):
@@ -78,10 +81,9 @@ class MainHandler(BaseHandler):
                 time_limit = datetime.datetime.now()-cache.insert_date
                 if (time_limit.days > settings.DATABASE_EXPIRE_NUMBER_OF_DAYS):
                     # update
-                    (allegro_price, allegro_url) = \
-                        self.__get_price_and_url_from_allegro(product_name)
-                    (nokaut_price, nokaut_url) = \
-                        self.__get_price_and_url_from_nokaut(product_name)
+                    (allegro_price, allegro_url) = allegro.search(
+                        "%s" % product_name)
+                    (nokaut_price, nokaut_url) = nokaut.search(product_name)
                     cache.update(product_name, allegro_price, allegro_url,
                                  nokaut_price, nokaut_url)
                 else:
@@ -93,10 +95,9 @@ class MainHandler(BaseHandler):
                     cache.increment_search_count()
             else:
                 # add
-                (allegro_price, allegro_url) = \
-                    self.__get_price_and_url_from_allegro(product_name)
-                (nokaut_price, nokaut_url) = \
-                    self.__get_price_and_url_from_nokaut(product_name)
+                (allegro_price, allegro_url) = allegro.search(
+                    "%s" % product_name)
+                (nokaut_price, nokaut_url) = nokaut.search(product_name)
                 SearchCache.add(product_name,
                                 allegro_price,
                                 allegro_url,
@@ -111,47 +112,19 @@ class MainHandler(BaseHandler):
         else:
             return {}
 
-    def __get_most_popular_search(self, size):
-        most_popular_query = SearchCache.query().order(-SearchCache.search_count)
-        return most_popular_query.fetch(size)
-
-    def __get_user_id(self):
+    def get_user_id(self):
         user = users.get_current_user()
         user_id = None
         if (user is not None):
             user_id = user.user_id()
         return user_id
 
-    def __get_user_nickname(self):
+    def get_user_nickname(self):
         user = users.get_current_user()
         user_nick = ''
         if (user is not None):
             user_nick = user.nickname()
         return user_nick
-
-    def __get_user_last_searches(self, size):
-        user_id = self.__get_user_id()
-        search_query = Search.query(
-            ancestor=Search.default_parent_key(user_id)).order(-Search.date)
-        return search_query.fetch(size)
-
-    def __add_search(self, product_name):
-        user_id = self.__get_user_id()
-        search = Search(parent=Search.default_parent_key(user_id),
-                        product_name=product_name
-                        )
-        user = users.get_current_user()
-        if user:
-            search.author = user
-        search.put()
-
-    def __get_price_and_url_from_allegro(self, product_name):
-        allegro = Allegro('"%s"' % product_name)
-        return allegro.search()
-
-    def __get_price_and_url_from_nokaut(self, product_name):
-        nokaut = Nokaut(product_name, settings.NOKAUT_KEY)
-        return nokaut.search()
 
 
 class StorageHandler(BaseHandler):

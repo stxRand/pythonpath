@@ -34,6 +34,21 @@ class Search(ndb.Model):
         else:
             return ndb.Key('Search', author)
 
+    @classmethod
+    def add(cls, product_name, user):
+        user_id = user.user_id() if user else None
+        search = Search(parent=Search.default_parent_key(user_id),
+                        product_name=product_name)
+        if user:
+            search.author = user
+        search.put()
+
+    @classmethod
+    def get_user_last_searches(cls, user_id, size):
+        search_query = Search.query(
+            ancestor=Search.default_parent_key(user_id)).order(-Search.date)
+        return search_query.fetch(size)
+
 
 class SearchCache(ndb.Model):
     """Model of search result cache"""
@@ -80,3 +95,8 @@ class SearchCache(ndb.Model):
             self.search_count = 1
         self.search_count = self.search_count+1
         self.put()
+
+    @classmethod
+    def get_most_popular_search(cls, size):
+        most_popular_query = SearchCache.query().order(-SearchCache.search_count)
+        return most_popular_query.fetch(size)
