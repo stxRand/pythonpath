@@ -96,12 +96,14 @@ class MainPage(BaseHandler):
                 'nokaut_price': nokaut_price,
                 'nokaut_url': nokaut_url,
                 'allegro_price': allegro_price,
-                'allegro_url': allegro_url
+                'allegro_url': allegro_url,
+                'product': product
             }
         """
 
         product_name = self.request.get('product', '')
         result = self.__process_search(product_name)
+        result.update({'product': product_name})
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(result, cls=DecimalEncoder))

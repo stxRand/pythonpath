@@ -15,29 +15,69 @@
     <div id="show_products">
     </div>
 
-    {% if product_name != '' %}
-      <p>You look for: {{ product_name }}</p>
-      <p>The best offer from nokaut.pl:</br>
-          {{ nokaut_price }} PLN <a href="{{ nokaut_url }}"> {{ nokaut_url }} </a>
-      </p>
-      <p>The best offer from allegro.pl:</br>
-          {{ allegro_price }} PLN <a href="{{ allegro_url }}"> {{ allegro_url }} </a>
-      </p>
-
-      <hr>
-    {% endif %}
+    <hr>
 
     <p>Product to comapre:<p>
 
-    <form action="/" method="post" id="formFindOffer">
+    <form action="/" method="post" id="form_find_offer">
       <div><input type="text" name="product" size="30" value="{{ product_name }}"></div>
-      <div><input type="submit" id="btnFindOffer" value="Find offers"></div>
+      <div><input type="submit" id="btn_find_offer" value="Find offers"></div>
     </form>
     
     <script language="javascript" type="text/javascript">
-      
-      $("#show_products").append('<p>Products:</p>');
-    
+      //http://stackoverflow.com/questions/5004233/jquery-ajax-post-example
+      $("#form_find_offer").submit(function(event){
+          
+          // setup some local variables
+          var $form = $(this);
+          var serializedData = $form.serialize();
+
+          var $inputs = $form.find("input, select, button, textarea");
+          // let's disable the inputs for the duration of the ajax request
+          $inputs.prop("disabled", true);
+
+          // fire off the request to /form.php
+          request = $.ajax({
+            url: "/",
+            type: "post",
+            cache: false,
+            data: serializedData
+          });
+
+          // callback handler that will be called on success
+          request.done(function (response, textStatus, jqXHR){
+            var output = JSON.stringify(response);
+            if (response.product!=''){
+              $("#show_products").html('');
+              $("#show_products").append('<p>You look for: '+response.product+'</p>');
+              $("#show_products").append('<p>The best offer from nokaut.pl:</br>');
+              $("#show_products").append(response.nokaut_price+' PLN ');
+              $("#show_products").append('<a href="'+response["nokaut_url"]+'"> '+response.nokaut_url+' </a>');
+              $("#show_products").append('</p>');
+              $("#show_products").append('<p>The best offer from allegro.pl:</br>');
+              $("#show_products").append(response.allegro_price+' PLN ');
+              $("#show_products").append('<a href="'+response.allegro_url+'"> '+response.allegro_url+' </a>');
+              $("#show_products").append('</p>');
+            }
+          });
+          
+
+          // callback handler that will be called on failure
+          request.fail(function (jqXHR, textStatus, errorThrown){
+            alert(errorThrown);
+            $("#show_products").append('<p>something went wrong</p>');
+          });
+
+          // callback handler that will be called regardless
+          // if the request failed or succeeded
+          request.always(function () {
+            // reenable the inputs
+            $inputs.prop("disabled", false);
+          });
+
+          // prevent default posting of form
+          event.preventDefault();
+        });  
     </script>
 
     <hr>
