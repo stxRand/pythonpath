@@ -6,7 +6,6 @@ from decimal import Decimal
 import json
 
 from pythonpath.bestoffer import application
-from pythonpath.bestoffer import DecimalEncoder
 
 
 class TestApp(unittest.TestCase):
