@@ -19,6 +19,15 @@ class DecimalEncoder(json.JSONEncoder):
         return super(DecimalEncoder, self).default(o)
 
 
+def login_required(handler):
+    """
+    login decorator TODO
+    """
+    def check_login(self, *args, **kwargs):
+        handler(self, *args, **kwargs)
+    return check_login
+
+
 class BaseHandler(webapp2.RequestHandler):
 
     @webapp2.cached_property
@@ -34,8 +43,6 @@ class BaseHandler(webapp2.RequestHandler):
         self.response.write(rv)
 
     def get_login_url_and_text(self, uri):
-        url = ''
-        url_linktext = ''
         if users.get_current_user():
             url = users.create_logout_url(uri)
             url_linktext = 'Logout'

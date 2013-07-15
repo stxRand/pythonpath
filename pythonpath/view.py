@@ -39,7 +39,7 @@ class MainHandler(BaseHandler):
             'last_searches_url': last_searches_url,
             'most_popular_search': most_popular_search
         }
-        template_values.update(self.__process_search(product_name))
+        template_values.update(self.process_search(product_name))
 
         self.render_response('index.html', **template_values)
 
@@ -61,13 +61,13 @@ class MainHandler(BaseHandler):
         """
 
         product_name = self.request.get('product', '')
-        result = self.__process_search(product_name)
+        result = self.process_search(product_name)
         result.update({'product': product_name})
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(result, cls=DecimalEncoder))
 
-    def __process_search(self, product_name):
+    def process_search(self, product_name):
         product_name = product_name.rstrip().lstrip()
         if (product_name != ''):
             allegro = Allegro()
