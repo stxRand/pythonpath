@@ -1,5 +1,6 @@
 import datetime
 import json
+import urllib2
 
 from google.appengine.api import users
 
@@ -81,11 +82,20 @@ class MainHandler(BaseHandler):
                 time_limit = datetime.datetime.now()-cache.insert_date
                 if (time_limit.days > settings.DATABASE_EXPIRE_NUMBER_OF_DAYS):
                     # update
-                    (allegro_price, allegro_url) = allegro.search(
-                        "%s" % product_name)
-                    (nokaut_price, nokaut_url) = nokaut.search(product_name)
+                    allegro.search("%s" % product_name)
+                    allegro_price = allegro.get_lowest_price()
+                    allegro_url = allegro.get_offer_url()
+                    allegro_img_url = allegro.get_img_url()
+                    allegro_img = urllib2.urlopen(allegro_img_url).read()
+
+                    nokaut.search(product_name)
+                    nokaut_price = nokaut.get_lowest_price()
+                    nokaut_url = nokaut.get_offer_url()
+                    nokaut_img_url = nokaut.get_img_url()
+                    nokaut_img = urllib2.urlopen(nokaut_img_url).read()
                     cache.update(product_name, allegro_price, allegro_url,
-                                 nokaut_price, nokaut_url)
+                                 nokaut_price, nokaut_url,
+                                 allegro_img, nokaut_img)
                 else:
                     # use previous results
                     allegro_price = cache.allegro_price
@@ -95,14 +105,24 @@ class MainHandler(BaseHandler):
                     cache.increment_search_count()
             else:
                 # add
-                (allegro_price, allegro_url) = allegro.search(
-                    "%s" % product_name)
-                (nokaut_price, nokaut_url) = nokaut.search(product_name)
+                allegro.search("%s" % product_name)
+                allegro_price = allegro.get_lowest_price()
+                allegro_url = allegro.get_offer_url()
+                allegro_img_url = allegro.get_img_url()
+                allegro_img = urllib2.urlopen(allegro_img_url).read()
+
+                nokaut.search(product_name)
+                nokaut_price = nokaut.get_lowest_price()
+                nokaut_url = nokaut.get_offer_url()
+                nokaut_img_url = nokaut.get_img_url()
+                nokaut_img = urllib2.urlopen(nokaut_img_url).read()
                 SearchCache.add(product_name,
                                 allegro_price,
                                 allegro_url,
                                 nokaut_price,
-                                nokaut_url)
+                                nokaut_url,
+                                allegro_img,
+                                nokaut_img)
             return {
                 'nokaut_price': nokaut_price,
                 'nokaut_url': nokaut_url,

@@ -65,8 +65,10 @@ class SearchCache(ndb.Model):
     nokaut_price = DecimalProperty()
     nokaut_url = ndb.StringProperty()
     search_count = ndb.IntegerProperty()
-    image = ndb.BlobProperty()
-    thumb = ndb.BlobProperty()
+    allegro_image = ndb.BlobProperty()
+    allegro_thumb = ndb.BlobProperty()
+    nokaut_image = ndb.BlobProperty()
+    nokaut_thumb = ndb.BlobProperty()
 
     @classmethod
     def add(cls,
@@ -75,14 +77,16 @@ class SearchCache(ndb.Model):
             allegro_url,
             nokaut_price,
             nokaut_url,
-            image=None):
+            allegro_image=None,
+            nokaut_image=None):
         cache = SearchCache(product_name=product_name,
                             allegro_price=allegro_price,
                             allegro_url=allegro_url,
                             nokaut_price=nokaut_price,
                             nokaut_url=nokaut_url,
                             search_count=1,
-                            image=image)
+                            allegro_image=allegro_image,
+                            nokaut_image=nokaut_image)
         cache.createThumb(100)
         cache.put()
         return cache
@@ -93,14 +97,16 @@ class SearchCache(ndb.Model):
                allegro_url,
                nokaut_price,
                nokaut_url,
-               image=None):
+               allegro_image=None,
+               nokaut_image=None):
         self.product_name = product_name
         self.allegro_price = allegro_price
         self.allegro_url = allegro_url
+        self.allegro_image = allegro_image
         self.nokaut_price = nokaut_price
         self.nokaut_url = nokaut_url
+        self.nokaut_image = nokaut_image
         self.search_count = self.search_count+1
-        self.image = image
         self.createThumb(100)
         self.put()
 
@@ -120,6 +126,7 @@ class SearchCache(ndb.Model):
         return SearchCache.query(SearchCache.product_name == product_name)
 
     def createThumb(self, size):
-        if self.image:
-            thumb = images.resize(self.image, size, size)
-            self.thumb = thumb
+        if self.allegro_image:
+            self.allegro_thumb = images.resize(self.allegro_image, size, size)
+        if self.nokaut_image:
+            self.nokaut_thumb = images.resize(self.nokaut_image, size, size)

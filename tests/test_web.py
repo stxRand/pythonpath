@@ -29,11 +29,37 @@ class TestApp(unittest.TestCase):
         self.assertEqual(response.content_type, 'text/html')
         self.assertIn('Product to comapre', response.normal_body)
 
+    @patch('urllib2.urlopen')
+    @patch('pythonpath.allegro.Allegro.get_img_url')
+    @patch('pythonpath.allegro.Allegro.get_offer_url')
+    @patch('pythonpath.allegro.Allegro.get_lowest_price')
     @patch('pythonpath.allegro.Allegro.search')
+    @patch('pythonpath.nokaut.Nokaut.get_img_url')
+    @patch('pythonpath.nokaut.Nokaut.get_offer_url')
+    @patch('pythonpath.nokaut.Nokaut.get_lowest_price')
     @patch('pythonpath.nokaut.Nokaut.search')
-    def test_main_post(self, mock_nokaut, mock_allegro):
-        mock_allegro.return_value = (Decimal(100.0), 'www.allegro.pl')
-        mock_nokaut.return_value = (Decimal(200.0), 'www.nokaut.pl')
+    def test_main_post(self,
+                       mock_nokaut_search,
+                       mock_nokaut_get_lowest_price,
+                       mock_nokaut_get_offer_url,
+                       mock_nokaut_get_img_url,
+                       mock_allegro_search,
+                       mock_allegro_get_lowest_price,
+                       mock_allegro_get_offer_url,
+                       mock_allegro_get_img_url,
+                       mock_urllib):
+        import StringIO
+        mock_urllib.return_value = StringIO.StringIO('')
+
+        mock_allegro_search.return_value = (Decimal(100.0), 'www.allegro.pl')
+        mock_allegro_get_lowest_price.return_value = Decimal(100.0)
+        mock_allegro_get_offer_url.return_value = 'www.allegro.pl'
+        mock_allegro_get_img_url.return_value = ''
+
+        mock_nokaut_search.return_value = (Decimal(200.0), 'www.nokaut.pl')
+        mock_nokaut_get_lowest_price.return_value = Decimal(200.0)
+        mock_nokaut_get_offer_url.return_value = 'www.nokaut.pl'
+        mock_nokaut_get_img_url.return_value = ''
 
         param = {'product': 'anything'}
         response = self.testapp.post('/', param)
