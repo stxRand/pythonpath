@@ -50,13 +50,13 @@ class TestApp(unittest.TestCase):
         SearchCache.add('Book', Decimal(100.0), 'www.allegro.pl',
                         Decimal(200.0), 'www.nokaut.pl')
         SearchCache.add('Tree', Decimal(100.0), 'www.allegro.pl',
-                Decimal(200.0), 'www.nokaut.pl')
-        
+                        Decimal(200.0), 'www.nokaut.pl')
+
         self.assertEqual(2, SearchCache.query().count())
 
         book = SearchCache.find_product('Book').fetch(1)[0]
         book.update('Book', Decimal(100.0), 'www.allegro.pl/test',
-                           Decimal(300.0), 'www.nokaut.pl')
+                    Decimal(300.0), 'www.nokaut.pl')
 
         self.assertEqual('Book', book.product_name)
         self.assertEqual(Decimal(100.0), book.allegro_price)

@@ -97,33 +97,33 @@ def mock_urlopen_function(url):
            and 'order=p' in url
            and 'standard_allegro=1' in url
            and 'offerTypeBuyNow=1' in url
-          ):
+        ):
             return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7_WITH_ORDER, url)
         return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7, url)
     elif('api.nokaut.pl' in url):
         if('name=&' in url and
-            'method=nokaut.Price.getByProductName' in url and
-            'key=' in url and
-            'format=xml' in url
-           ):
-            return MockUrlOpen(static.GET_EMPTY_NOKAUT_RESPONSE,url)
+           'method=nokaut.Price.getByProductName' in url and
+           'key=' in url and
+           'format=xml' in url
+        ):
+            return MockUrlOpen(static.GET_EMPTY_NOKAUT_RESPONSE, url)
         elif ('name=' in url and
-            'method=nokaut.Price.getByProductName' in url and
-            'key=' in url and
-            'format=xml' in url
-           ):
+              'method=nokaut.Price.getByProductName' in url and
+              'key=' in url and
+              'format=xml' in url
+        ):
             return MockUrlOpen(static.GET_PRICE_NOKAUT_RESPONSE, url)
         elif ('id=&' in url and
-            'method=nokaut.Product.getById' in url and
-            'key=' in url and
-            'format=xml' in url
-           ):
-            return MockUrlOpen(static.GET_EMPTY_NOKAUT_RESPONSE,url)
+              'method=nokaut.Product.getById' in url and
+              'key=' in url and
+              'format=xml' in url
+        ):
+            return MockUrlOpen(static.GET_EMPTY_NOKAUT_RESPONSE, url)
         elif ('id=' in url and
-            'method=nokaut.Product.getById' in url and
-            'key=' in url and
-            'format=xml' in url
-           ):
+              'method=nokaut.Product.getById' in url and
+              'key=' in url and
+              'format=xml' in url
+        ):
             return MockUrlOpen(static.GET_PRODUCT_NOKAUT_RESPONSE, url)
         else:
             MockUrlOpen('', url)
@@ -155,11 +155,14 @@ class TestNokautClass(unittest.TestCase):
         nokaut_search.search()
         price = nokaut_search.get_lowest_price()
         url = nokaut_search.get_offer_url()
+        img_url = nokaut_search.get_img_url()
 
         self.assertIsInstance(price, Decimal)
         self.assertEqual(price, Decimal(3699.00))
         self.assertIsInstance(url, str)
         self.assertEqual(url, 'http://www.nokaut.pl/aparaty-cyfrowe/sony-nex-7.html')
+        self.assertEqual(img_url,
+            'http://nokautimg3.pl/p-b8-d3-b8d362b87922356cacc456f1d2335e10500x500/sony-nex-7.jpg')
 
     @unittest.skip("online test - requires internet connection")
     def test_empty_search(self):
