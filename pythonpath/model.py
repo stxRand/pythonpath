@@ -44,9 +44,14 @@ class Search(ndb.Model):
         search.put()
 
     @classmethod
-    def get_user_last_searches(cls, user_id, size):
+    def fetch_user_last_searches(cls, user_id, size):
         search_query = Search.query(
             ancestor=Search.default_parent_key(user_id)).order(-Search.date)
+        return search_query.fetch(size)
+
+    @classmethod
+    def fetch_last_searches(cls, size):
+        search_query = Search.query().order(-Search.date)
         return search_query.fetch(size)
 
 
@@ -100,3 +105,8 @@ class SearchCache(ndb.Model):
     def get_most_popular_search(cls, size):
         most_popular_query = SearchCache.query().order(-SearchCache.search_count)
         return most_popular_query.fetch(size)
+
+    @classmethod
+    def find_product(cls, product_name):
+        return SearchCache.query(SearchCache.product_name == product_name)
+

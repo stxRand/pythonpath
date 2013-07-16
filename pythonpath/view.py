@@ -26,7 +26,7 @@ class MainHandler(BaseHandler):
         most_popular_search = SearchCache.get_most_popular_search(5)
 
         user_id = self.get_user_id()
-        last_searches = Search.get_user_last_searches(user_id, 5)
+        last_searches = Search.fetch_user_last_searches(user_id, 5)
         last_searches_url = [encode_url('product', _search)
                              for _search in last_searches]
 
@@ -75,7 +75,7 @@ class MainHandler(BaseHandler):
 
             Search.add(product_name, users.get_current_user())
 
-            cache_query = SearchCache.query(SearchCache.product_name == product_name)
+            cache_query = SearchCache.find_product(product_name)
             if (cache_query.count() > 0):
                 cache = cache_query.fetch(1).pop()
                 time_limit = datetime.datetime.now()-cache.insert_date
@@ -133,8 +133,7 @@ class StorageHandler(BaseHandler):
 
         (url, url_linktext) = self.get_login_url_and_text(self.request.uri)
 
-        search_query = Search.query().order(-Search.date)
-        search_query = search_query.fetch(10)
+        search_query = Search.fetch_last_searches(10)
 
         template_values = {
             'searches': search_query,
