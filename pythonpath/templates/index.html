@@ -2,6 +2,10 @@
 <head>
   <link type="text/css" rel="stylesheet" href="/css/main.css" />
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+  <script src="js/jquery-1.10.2.min.js"></script>
+  <script src="js/lightbox-2.6.min.js"></script>
+  <link type="text/css" href="css/lightbox.css" rel="stylesheet" />
 </head>
 
 
@@ -96,6 +100,8 @@
         {{ search_cache.product_name }} : {{ search_cache.search_count }}
       </p>
     {% endfor %}
+
+    <a href="img/demopage/image-1.jpg" data-lightbox="image-1" title="My caption"><img src="img/demopage/thumb-1.jpg" alt="Test Image" height="150" width="150" /> </a>
   </body>
 </html>
 {% endautoescape %}
