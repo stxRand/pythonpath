@@ -45,6 +45,26 @@ class TestApp(unittest.TestCase):
         self.assertEqual(response_body['allegro_url'], 'www.allegro.pl')
         self.assertEqual(response_body['nokaut_url'], 'www.nokaut.pl')
 
+    def test_search_cache(self):
+        from pythonpath.model import SearchCache
+        SearchCache.add('Book', Decimal(100.0), 'www.allegro.pl',
+                        Decimal(200.0), 'www.nokaut.pl')
+        SearchCache.add('Tree', Decimal(100.0), 'www.allegro.pl',
+                Decimal(200.0), 'www.nokaut.pl')
+        
+        self.assertEqual(2, SearchCache.query().count())
+
+        book = SearchCache.find_product('Book').fetch(1)[0]
+        book.update('Book', Decimal(100.0), 'www.allegro.pl/test',
+                           Decimal(300.0), 'www.nokaut.pl')
+
+        self.assertEqual('Book', book.product_name)
+        self.assertEqual(Decimal(100.0), book.allegro_price)
+        self.assertEqual('www.allegro.pl/test', book.allegro_url)
+        self.assertEqual(Decimal(300.0), book.nokaut_price)
+        self.assertEqual('www.nokaut.pl', book.nokaut_url)
+        self.assertEqual(2, book.search_count)
+
 
 if __name__ == '__main__':
     unittest.main()
