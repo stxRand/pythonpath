@@ -230,6 +230,7 @@ class TestAllegroClass(unittest.TestCase):
         allegro.search()
         price = allegro.get_lowest_price()
         url = allegro.get_offer_url()
+        img_url = allegro.get_img_url()
 
         self.assertIsInstance(price, Decimal)
         self.assertTrue(price == Decimal(4275.00))
@@ -239,6 +240,7 @@ class TestAllegroClass(unittest.TestCase):
             'http://www.allegro.pl/aparat-sony-nex-7-18-55mm-16gb-' +
             'etui-nowosc-wa-ss-i3358538364.html'
         )
+        self.assertEqual(img_url, 'http://img17.allegroimg.pl/photos/oryginal/33/58/53/83/3358538364')
 
     @patch('mechanize.urlopen', mock_urlopen_function)
     def test_empty_search_offline(self):

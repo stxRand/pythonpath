@@ -42,7 +42,8 @@ class Allegro(OfferProvider):
         search_address = self.__prepare_initial_allegro_url(self.product_name)
         forms = self.__get_forms_with_mechanize(search_address)
         html = self.__prepare_and_send_advanced_search_form(forms)
-        (self._price, self._url) = self.__find_price_and_url_in_html(html)
+        (self._price, self._url, self._img_url) = \
+            self.__find_price_and_url_in_html(html)
 
         logging.debug((self._price, self._url))
         return (self._price, self._url)
@@ -121,9 +122,17 @@ class Allegro(OfferProvider):
         price = price.replace(' ', '').replace(',', '.')
         return Decimal(price)
 
+    def __parse_img_url(self, section):
+        divtag = section.find('div', {'class': 'photo loading'})
+        img_url = str(divtag['data-img'].split(',')[2])
+        img_url = img_url.replace('"', '').replace(']', '')
+        img_url = img_url.replace('400x300', 'oryginal')
+        return img_url
+
     def __find_price_and_url_in_html(self, html):
         url = ''
         price = Decimal(0.0)
+        img_url = ''
 
         soup = BeautifulSoup(html)
         section_tags = soup.findAll('section', {'class': 'offers'})
@@ -133,5 +142,5 @@ class Allegro(OfferProvider):
             if (h2tag.string == 'lista ofert'):
                 url = self.__parse_url(section_tag)
                 price = self.__parse_price(section_tag)
-
-        return (price, url)
+                img_url = self.__parse_img_url(section_tag)
+        return (price, url, img_url)
