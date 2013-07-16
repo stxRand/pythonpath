@@ -23,6 +23,7 @@ class Allegro(OfferProvider):
         self.product_name = product_name
         self._price = Decimal(0.0)
         self._url = ''
+        self._img_url = ''
 
     def search(self, product_name=None):
         """Finds a offer of product with the lowest price in the
@@ -55,6 +56,11 @@ class Allegro(OfferProvider):
         """Returns a offer url from the last search"""
 
         return self._url
+
+    def get_img_url(self):
+        """Returns a product image url from the last search"""
+
+        return self._img_url
 
     def __prepare_initial_allegro_url(self, product_name):
         product_name_encoded = urllib.urlencode({'string': product_name})

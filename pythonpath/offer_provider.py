@@ -24,9 +24,17 @@ class OfferProvider(object):
     @abc.abstractproperty
     def get_lowest_price(self):
         """Returns the lowest price from the last search"""
+
         return Decimal(0.0)
 
     @abc.abstractproperty
     def get_offer_url(self):
         """Returns a offer url from the last search"""
+
+        return ''
+
+    @abc.abstractproperty
+    def get_img_url(self):
+        """Returns a product image url from the last search"""
+
         return ''

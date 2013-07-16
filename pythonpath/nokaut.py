@@ -21,6 +21,7 @@ class Nokaut(OfferProvider):
         self.nokaut_key = nokaut_key
         self._price = Decimal(0.0)
         self._url = ''
+        self._img_url = ''
 
     def search(self, product_name=None):
         """Finds a offer of product with the lowest price in the
@@ -49,6 +50,7 @@ class Nokaut(OfferProvider):
             'nokaut.Product.getById', 'id', product_id
         )
         self._url = self.__get_product_url(xml)
+        self._img_url = self.__get_product_img_url(xml)
 
         logging.debug((self._price, self._url))
 
@@ -63,6 +65,11 @@ class Nokaut(OfferProvider):
         """Returns a product url from the last search"""
 
         return self._url
+
+    def get_img_url(self):
+        """Returns a product image url from the last search"""
+
+        return self._img_url
 
     def __get_xml_with_nokaut_api(self, method,
                                   method_param_name,
@@ -108,6 +115,14 @@ class Nokaut(OfferProvider):
         for product_url in xml.xpath(".//url/text()"):
             url = str(product_url)
         logging.debug(url)
+        return url
+
+    def __get_product_img_url(self, xml):
+        xml = etree.fromstring(xml)
+        url = ''
+        for img_url in xml.xpath(".//image_large/text()"):
+            url = str(img_url)
+        logging.debug("Nokaut Image url %s" % url)
         return url
 
 
