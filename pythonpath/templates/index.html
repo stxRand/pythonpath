@@ -68,8 +68,9 @@
 
           // callback handler that will be called on failure
           request.fail(function (jqXHR, textStatus, errorThrown){
+            $("#show_products").html('');
+            $("#show_products").append('<p>Sorry. Something is wrong</p>');
             alert(errorThrown);
-            $("#show_products").append('<p>something went wrong</p>');
           });
 
           // callback handler that will be called regardless
