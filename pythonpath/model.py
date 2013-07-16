@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.api import images
 
 from decimal import Decimal
 
@@ -64,6 +65,8 @@ class SearchCache(ndb.Model):
     nokaut_price = DecimalProperty()
     nokaut_url = ndb.StringProperty()
     search_count = ndb.IntegerProperty()
+    image = ndb.BlobProperty()
+    thumb = ndb.BlobProperty()
 
     @classmethod
     def add(cls,
@@ -71,13 +74,16 @@ class SearchCache(ndb.Model):
             allegro_price,
             allegro_url,
             nokaut_price,
-            nokaut_url):
+            nokaut_url,
+            image=None):
         cache = SearchCache(product_name=product_name,
                             allegro_price=allegro_price,
                             allegro_url=allegro_url,
                             nokaut_price=nokaut_price,
                             nokaut_url=nokaut_url,
-                            search_count=1)
+                            search_count=1,
+                            image=image)
+        cache.createThumb()
         cache.put()
         return cache
 
@@ -86,13 +92,16 @@ class SearchCache(ndb.Model):
                allegro_price,
                allegro_url,
                nokaut_price,
-               nokaut_url):
+               nokaut_url,
+               image=None):
         self.product_name = product_name
         self.allegro_price = allegro_price
         self.allegro_url = allegro_url
         self.nokaut_price = nokaut_price
         self.nokaut_url = nokaut_url
         self.search_count = self.search_count+1
+        self.image = image
+        self.createThumb()
         self.put()
 
     def increment_search_count(self):
@@ -110,3 +119,7 @@ class SearchCache(ndb.Model):
     def find_product(cls, product_name):
         return SearchCache.query(SearchCache.product_name == product_name)
 
+    def createThumb(self):
+        if self.image:
+            thumb = images.resize(self.image, 100, 100)
+            self.thumb = thumb
