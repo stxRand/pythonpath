@@ -83,7 +83,7 @@ class SearchCache(ndb.Model):
                             nokaut_url=nokaut_url,
                             search_count=1,
                             image=image)
-        cache.createThumb()
+        cache.createThumb(100)
         cache.put()
         return cache
 
@@ -101,7 +101,7 @@ class SearchCache(ndb.Model):
         self.nokaut_url = nokaut_url
         self.search_count = self.search_count+1
         self.image = image
-        self.createThumb()
+        self.createThumb(100)
         self.put()
 
     def increment_search_count(self):
@@ -119,7 +119,7 @@ class SearchCache(ndb.Model):
     def find_product(cls, product_name):
         return SearchCache.query(SearchCache.product_name == product_name)
 
-    def createThumb(self):
+    def createThumb(self, size):
         if self.image:
-            thumb = images.resize(self.image, 100, 100)
+            thumb = images.resize(self.image, size, size)
             self.thumb = thumb
