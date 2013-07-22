@@ -1,6 +1,7 @@
 import datetime
 import json
 import urllib2
+import webapp2
 
 from google.appengine.api import users
 
@@ -13,6 +14,8 @@ from basehandler import encode_url
 from basehandler import BaseHandler
 from basehandler import DecimalEncoder
 
+import logging
+logging.basicConfig(filename='pythonpath.log', level=logging.DEBUG)
 
 class MainHandler(BaseHandler):
 
@@ -73,6 +76,7 @@ class MainHandler(BaseHandler):
         if (product_name != ''):
             allegro = Allegro()
             nokaut = Nokaut(nokaut_key=settings.NOKAUT_KEY)
+            image_id = -1
 
             Search.add(product_name, users.get_current_user())
 
@@ -96,6 +100,7 @@ class MainHandler(BaseHandler):
                     cache.update(product_name, allegro_price, allegro_url,
                                  nokaut_price, nokaut_url,
                                  allegro_img, nokaut_img)
+                    image_id = cache.key.id()
                 else:
                     # use previous results
                     allegro_price = cache.allegro_price
@@ -103,6 +108,7 @@ class MainHandler(BaseHandler):
                     nokaut_price = cache.nokaut_price
                     nokaut_url = cache.nokaut_url
                     cache.increment_search_count()
+                    image_id = cache.key.id()
             else:
                 # add
                 allegro.search("%s" % product_name)
@@ -116,18 +122,20 @@ class MainHandler(BaseHandler):
                 nokaut_url = nokaut.get_offer_url()
                 nokaut_img_url = nokaut.get_img_url()
                 nokaut_img = urllib2.urlopen(nokaut_img_url).read()
-                SearchCache.add(product_name,
-                                allegro_price,
-                                allegro_url,
-                                nokaut_price,
-                                nokaut_url,
-                                allegro_img,
-                                nokaut_img)
+                cache = SearchCache.add(product_name,
+                                        allegro_price,
+                                        allegro_url,
+                                        nokaut_price,
+                                        nokaut_url,
+                                        allegro_img,
+                                        nokaut_img)
+                image_id = cache.key.id()
             return {
                 'nokaut_price': nokaut_price,
                 'nokaut_url': nokaut_url,
                 'allegro_price': allegro_price,
-                'allegro_url': allegro_url
+                'allegro_url': allegro_url,
+                'image_id': image_id,
             }
         else:
             return {}
@@ -162,3 +170,51 @@ class StorageHandler(BaseHandler):
         }
 
         self.render_response('storage.html', **template_values)
+
+
+class AllegroThumbHandler(webapp2.RequestHandler):
+    def get(self):
+        id = self.request.get("id")
+        if id:
+            photo = SearchCache.get_allegro_thumb(int(id))
+            if photo is not None:
+                self.response.headers['Content-Type'] = 'image/jpeg'
+                self.response.out.write(photo)
+                return
+        self.error(404)
+
+
+class AllegroImageHandler(webapp2.RequestHandler):
+    def get(self):
+        id = self.request.get("id")
+        if id:
+            photo = SearchCache.get_allegro_image(int(id))
+            if photo is not None:
+                self.response.headers['Content-Type'] = 'image/jpeg'
+                self.response.out.write(photo)
+                return
+        self.error(404)
+
+
+class NokautThumbHandler(webapp2.RequestHandler):
+    def get(self):
+        id = self.request.get("id")
+        if id:
+            photo = SearchCache.get_nokaut_thumb(int(id))
+            if photo is not None:
+                self.response.headers['Content-Type'] = 'image/jpeg'
+                self.response.out.write(photo)
+                return
+        self.error(404)
+
+
+class NokautImageHandler(webapp2.RequestHandler):
+    def get(self):
+        id = self.request.get("id")
+        if id:
+            photo = SearchCache.get_nokaut_image(int(id))
+            if photo is not None:
+                self.response.headers['Content-Type'] = 'image/jpeg'
+                self.response.out.write(photo)
+                return
+        self.error(404)

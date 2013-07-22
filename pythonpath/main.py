@@ -2,6 +2,10 @@ import os
 import webapp2
 from view import MainHandler
 from view import StorageHandler
+from view import AllegroThumbHandler
+from view import AllegroImageHandler
+from view import NokautThumbHandler
+from view import NokautImageHandler
 
 config = {}
 config['webapp2_extras.jinja2'] = {
@@ -13,5 +17,9 @@ config['webapp2_extras.jinja2'] = {
 
 application = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/storage', StorageHandler)
+    ('/storage', StorageHandler),
+    ('/image/allegro', AllegroImageHandler),
+    ('/image/allegro/thumb', AllegroThumbHandler),
+    ('/image/nokaut', NokautImageHandler),
+    ('/image/nokaut/thumb', NokautThumbHandler)
 ], debug=True, config=config)
