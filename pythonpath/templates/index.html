@@ -55,11 +55,13 @@
               $("#show_products").html('');
               $("#show_products").append('<p>You look for: '+response.product+'</p>');
               $("#show_products").append('<p>The best offer from nokaut.pl:</br>');
-              $("#show_products").append(response.nokaut_price+' PLN ');
-              $("#show_products").append('<a href="'+response["nokaut_url"]+'"> '+response.nokaut_url+' </a>');
+              $("#show_products").append('<a href="/image/nokaut?id='+response.image_id+'" data-lightbox="image' + response.image_id + '" title="' +response.product.replace('"','')+ '"><img src="/image/nokaut/thumb?id='+response.image_id+'" alt="'+response.product.replace('"','')+'" height="100" width="100" /></a></br> ');
+              $("#show_products").append(response.nokaut_price+' PLN </br>');
+              $("#show_products").append('<a href="'+response.nokaut_url+'"> '+response.nokaut_url+' </a>');
               $("#show_products").append('</p>');
               $("#show_products").append('<p>The best offer from allegro.pl:</br>');
-              $("#show_products").append(response.allegro_price+' PLN ');
+              $("#show_products").append('<a href="/image/allegro?id='+response.image_id+'" data-lightbox="image' + response.image_id + '" title="' +response.product.replace('"','')+ '"><img src="/image/allegro/thumb?id='+response.image_id+'" alt="'+response.product.replace('"','')+'" height="100" width="100" /></a></br> ');
+              $("#show_products").append(response.allegro_price+' PLN </br>');
               $("#show_products").append('<a href="'+response.allegro_url+'"> '+response.allegro_url+' </a>');
               $("#show_products").append('</p>');
             }
@@ -102,7 +104,6 @@
       </p>
     {% endfor %}
 
-    <a href="img/demopage/image-1.jpg" data-lightbox="image-1" title="My caption"><img src="img/demopage/thumb-1.jpg" alt="Test Image" height="150" width="150" /> </a>
   </body>
 </html>
 {% endautoescape %}
