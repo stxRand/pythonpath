@@ -17,6 +17,7 @@ class TestApp(unittest.TestCase):
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_user_stub()
         self.testbed.init_memcache_stub()
+        self.testbed.init_images_stub()
 
         self.testapp = webtest.TestApp(application)
 
@@ -90,6 +91,28 @@ class TestApp(unittest.TestCase):
         self.assertEqual(Decimal(300.0), book.nokaut_price)
         self.assertEqual('www.nokaut.pl', book.nokaut_url)
         self.assertEqual(2, book.search_count)
+
+    def test_img(self):
+        self.testapp.get('/image/allegro', status=404)
+        from pythonpath.model import SearchCache
+        cache = SearchCache.add('Book', Decimal(100.0), 'www.allegro.pl',
+                                Decimal(200.0), 'www.nokaut.pl')
+        #empty image field
+        self.testapp.get('/image/allegro?id=%d' % cache.key.id(), status=404)
+
+        import os
+        path = os.path.join(os.path.split(__file__)[0],
+                            '../pythonpath/img/demopage/thumb-1.jpg')
+        img_file = open(path, 'r')
+        img = img_file.read()
+        cache = SearchCache.add('Book2', Decimal(200.0), 'www.allegro.pl',
+                                Decimal(300.0), 'www.nokaut.pl',
+                                img, img)
+        img_file.close()
+        self.assertEqual(2, SearchCache.query().count())
+
+        #not working
+        self.testapp.get('/image/allegro/thumb?id=%d' % cache.key.id(), status=200)
 
 
 if __name__ == '__main__':

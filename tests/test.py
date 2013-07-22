@@ -12,6 +12,43 @@ from pythonpath import settings
 import static
 
 
+def mock_urlopen_function(url):
+    if (not isinstance(url, str)):
+        url = url.get_full_url()
+    url = str(url)
+    if ('allegro.pl' in url and not 'string=&' in url):
+        if('description=1' in url
+           and 'order=p' in url
+           and 'standard_allegro=1' in url
+           and 'offerTypeBuyNow=1' in url):
+            return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7_WITH_ORDER, url)
+        return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7, url)
+    elif('api.nokaut.pl' in url):
+        if('name=&' in url and
+           'method=nokaut.Price.getByProductName' in url and
+           'key=' in url and
+           'format=xml' in url):
+            return MockUrlOpen(static.GET_EMPTY_NOKAUT_RESPONSE, url)
+        elif ('name=' in url and
+              'method=nokaut.Price.getByProductName' in url and
+              'key=' in url and
+              'format=xml' in url):
+            return MockUrlOpen(static.GET_PRICE_NOKAUT_RESPONSE, url)
+        elif ('id=&' in url and
+              'method=nokaut.Product.getById' in url and
+              'key=' in url and
+              'format=xml' in url):
+            return MockUrlOpen(static.GET_EMPTY_NOKAUT_RESPONSE, url)
+        elif ('id=' in url and
+              'method=nokaut.Product.getById' in url and
+              'key=' in url and
+              'format=xml' in url):
+            return MockUrlOpen(static.GET_PRODUCT_NOKAUT_RESPONSE, url)
+        else:
+            MockUrlOpen('', url)
+    return MockUrlOpen('', url)
+
+
 class TestNokaut(unittest.TestCase):
     """testing nokaut module"""
 
@@ -86,48 +123,6 @@ class TestNokaut(unittest.TestCase):
             "nokaut -z"
         )
         self.assertNotEqual(err, 0)
-
-
-def mock_urlopen_function(url):
-    if (not isinstance(url, str)):
-        url = url.get_full_url()
-    url = str(url)
-    if ('allegro.pl' in url and not 'string=&' in url):
-        if('description=1' in url
-           and 'order=p' in url
-           and 'standard_allegro=1' in url
-           and 'offerTypeBuyNow=1' in url
-        ):
-            return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7_WITH_ORDER, url)
-        return MockUrlOpen(static.SEARCH_ALLEGRO_APARAT_SONY_NEX_7, url)
-    elif('api.nokaut.pl' in url):
-        if('name=&' in url and
-           'method=nokaut.Price.getByProductName' in url and
-           'key=' in url and
-           'format=xml' in url
-        ):
-            return MockUrlOpen(static.GET_EMPTY_NOKAUT_RESPONSE, url)
-        elif ('name=' in url and
-              'method=nokaut.Price.getByProductName' in url and
-              'key=' in url and
-              'format=xml' in url
-        ):
-            return MockUrlOpen(static.GET_PRICE_NOKAUT_RESPONSE, url)
-        elif ('id=&' in url and
-              'method=nokaut.Product.getById' in url and
-              'key=' in url and
-              'format=xml' in url
-        ):
-            return MockUrlOpen(static.GET_EMPTY_NOKAUT_RESPONSE, url)
-        elif ('id=' in url and
-              'method=nokaut.Product.getById' in url and
-              'key=' in url and
-              'format=xml' in url
-        ):
-            return MockUrlOpen(static.GET_PRODUCT_NOKAUT_RESPONSE, url)
-        else:
-            MockUrlOpen('', url)
-    return MockUrlOpen('', url)
 
 
 class TestNokautClass(unittest.TestCase):
