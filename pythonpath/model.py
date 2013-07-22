@@ -130,3 +130,35 @@ class SearchCache(ndb.Model):
             self.allegro_thumb = images.resize(self.allegro_image, size, size)
         if self.nokaut_image:
             self.nokaut_thumb = images.resize(self.nokaut_image, size, size)
+
+    @classmethod
+    def get_allegro_thumb(cls, id):
+        thumb = None
+        if id:
+            cache = SearchCache.get_by_id(id)
+            thumb = cache.allegro_thumb
+        return thumb
+
+    @classmethod
+    def get_nokaut_thumb(cls, id):
+        thumb = None
+        if id:
+            cache = SearchCache.get_by_id(id)
+            thumb = cache.nokaut_thumb
+        return thumb
+
+    @classmethod
+    def get_allegro_image(cls, id):
+        image = None
+        if id:
+            cache = SearchCache.get_by_id(id)
+            image = cache.allegro_image
+        return image
+
+    @classmethod
+    def get_nokaut_image(cls, id):
+        image = None
+        if id:
+            cache = SearchCache.get_by_id(id)
+            image = cache.nokaut_image
+        return image
